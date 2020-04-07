@@ -30,13 +30,13 @@
 
 \singlespacing
 
-\usepackage[italian]{babel}
+\usepackage[english]{babel}
 
 \begin{document}
 
 % nessuna numerazione
 \pagenumbering{gobble}
-\input{pagina_iniziale}
+\input{first_page}
 
 \clearpage
 
@@ -47,7 +47,7 @@
 %% Sezione Ringraziamenti opzionale
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{ringraziamenti}
+\input{acknowledgements}
 \clearpage
 \pagestyle{plain} % nessuna intestazione e pie pagina con numero al centro
 
@@ -67,7 +67,7 @@
 %% Dal conteggio delle facciate sono escluse
 %%   frontespizio
 %%   ringraziamenti
-%%   allegati    
+%%   allegati   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -98,7 +98,7 @@
 \titlespacing*{\subsection}{0pt}{0.10in}{0.02in}
 
 % sommario
-\input{sommario}
+\input{chapters/0_summary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Nota
@@ -120,10 +120,11 @@
 %
 % \input oppure \include
 %
-\input{capitolo1}
-\input{capitolo2}
-\input{capitolo3}
-%\input{capitolo4}
+\input{chapters/1_literature_review}
+\input{chapters/2_data_analysis}
+\input{chapters/3_forecasting_methods}
+\input{chapters/4_results}
+\input{chapters/5_conclusions}
 
 
 \endgroup
@@ -132,7 +133,7 @@
 % bibliografia in formato bibtex
 %
 % aggiunta del capitolo nell'indice
-\addcontentsline{toc}{chapter}{Bibliografia}
+\addcontentsline{toc}{chapter}{References}
 % stile con ordinamento alfabetico in funzione degli autori
 \bibliographystyle{plain}
 \bibliography{biblio}
@@ -163,12 +164,5 @@
 %%   Se disponibile, inserire la data di ultima consultazione della risorsa (gg/mm/aaaa).    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\titleformat{\chapter}
-{\normalfont\Huge\bfseries}{Allegato \thechapter}{1em}{}
-% sezione Allegati - opzionale
-\appendix
-\input{allegati}
 
 \end{document}

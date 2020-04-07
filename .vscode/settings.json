@@ -1,0 +1,47 @@
+{
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ],
+    "latex-workshop.latex.outDir": "%DIR%\\.tmp",
+    "latex-workshop.latex.recipe.default": "first",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk 🔃",
+            "tools": [
+                "latexmk",
+                "cppdf"
+            ]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "cppdf",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "cp",
+                "%OUTDIR%\\%DOCFILE%.pdf",
+                "%DIR%"
+            ],
+            "env": {}
+        }
+    ]
+}
