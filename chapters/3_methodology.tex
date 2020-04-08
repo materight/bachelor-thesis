@@ -3,13 +3,51 @@
 
 This chapter describes the methods used to build the prediction model.
 
-The model is composed of two sub-models that cooperate to give accurate predictions. The first sub-model is used to get a forecast of the inflow rate for the following time intervals, using time series forecasting techniques. The second sub-model is used to get a forecast of the arrival rate at the checkouts, using the results of the first sub-model.
+\section{Model overview}
+The final model is composed by different parts that cooperates to obtain the final result.
+
+First, the measured inflow rate for the recent past is combined with a forecast of the inflow rate for the immediate future. This values, combined with a dwell time prediction, are used to obtain a prediction of the arrival rate at the checkouts. The arrival rate is then used with queueing theory methods to calculate the expected queue length for a given interval.
 
 \section{Inflow rate forecast}
 \label{sec:inflow_rate_forecast}
+
+The inflow rate can be expressed as a time series, hence time series forecasting methods were used. As described in Chapter \ref{sec:time_series_forecasting}, different forecasting methods were tested and the best was selected based on the performance obtained.
+
+\subsection{Persistence model}
+\label{subsec:persistence_model}
+The first model tested was used to define a baseline in performance. This gives an idea of how well the other models could perform on the time series, and if a model’s performance are worse than this baseline it should no be considered. The baseline was obtained by a \emph{persistence model}, were the last measured value \(y_{t-1}\) is used as forecast:
+\[ \hat{y}_t = y_{t-1} \]
+
+\subsection{Naïve model}
+\label{subsec:naive_model}
+As seen in Chapter \ref{cha:data_analysis}, the arrival rate time series presents a strong seasonal component, so the forecast should be based on this repeating pattern. The forecast value was calculated as the average of the values in the previous weeks for the same day and time:
+\[ \hat{y}_t = \hat{f}(t) = \frac{1}{N} \sum_{i=1}^{N} y_{t-iW} \]
+where \(W\) is the number of intervals in a week and \(N\) is the number of previous week considered.
+
+The model performance were worse than the baseline. Looking at the results, it is clear that this model is not able to consider the variations in the inflow rate that can be caused by external factors, e.g. holidays. To take in account this variations, a local drift was calculated using the forecasted errors value of the immediate past:
+\[ \hat{y}_t = \hat{f}(t) + \frac{1}{M} \sum_{i=1}^{M} \hat{y}_{t-i} - \hat{f}(t-i) \]
+were \(M\) is the number of previous step considered.
+
+\subsection{Artificial Neural Network model}
+\label{subsec:ann_mode.}
+
+\subsection{ARIMA model}
+\label{subsec:arima_model}
 
 \section{Arrival rate forecast}
 \label{sec:arrival_rate_forecast}
 
 \section{Queue length forecast}
 \label{sec:queue_length_forecasting}
+
+\subsection{Service rate approximation}
+\label{subsec:service_rate_approximation}
+
+\subsection{Outflow rate approximation}
+\label{subsec:outflow_rate_approximation}
+
+\section{Checkouts optimization}
+\label{sec:checkouts_optimization}
+
+\subsection{Opening/closing fluctuations control}
+\label{subsec:opening_closing_fluctuations_control}
