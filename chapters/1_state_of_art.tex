@@ -1,16 +1,14 @@
 \chapter{State of art}
 \label{cha:state_of_art}
 
-This chapter gives an overview of the available methods of time series forecasting and queue analysis.
+This chapter gives an overview of the available methods of time series forecasting and queue analysis. First, the available methods for time series forecasting are presented, then an overview of queueing theory techniques is given and finally different approaches from similar researches are described.
 
-\section{Terminology}
-\label{sec:terminology}
-
+Terminology:
 \begin{itemize}
-  \item \emph{Inflow/outflow rate}: The number of customers that enter/exit the supermarket in a given interval.
-  \item \emph{Arrival rate}: The number of customers that arrive at the checkouts in a given interval.
-  \item \emph{Service rate}: The maximum number of customers that can be served by each terminal in a given interval.
-  \item \emph{Dwell time}: Time spent by a customer in the supermarket.
+  \item \emph{Inflow/outflow rate}: number of customers that enter/exit the supermarket in a given interval.
+  \item \emph{Arrival rate}: number of customers that arrive at the checkouts in a given interval.
+  \item \emph{Service rate}: maximum number of customers that can be served by each checkout in a given interval.
+  \item \emph{Dwell time}: time spent by a customer in the supermarket.
 \end{itemize}
 
 
@@ -30,6 +28,7 @@ The following sections describes different techniques that can be used to obtain
 
 
 \subsection{Exponential smoothing}
+\label{subsec:exponential_smoothing}
 In the \emph{Simple exponential smoothing} technique, the forecasted values are based on a weighted average of the previous values, where the most recent observations are given more importance using larger weights \cite{hyndman}.
 
 A more complex implementation is the \emph{Holt-Winters exponential smoothing} approach, which is able to decompose the time series into level, trend and seasonal component, giving a more precise forecast. However, this methods are unable to model more complex series with multiple seasonality patterns, as in a supermarket inflow rate.
@@ -38,21 +37,31 @@ Taylor’s \emph{double seasonal exponential smoothing} method \cite{taylor} was
 
 
 \subsection{Artificial Neural Networks}
-
+\label{subsec:artificial_neural_networks}
+Artificial Neural Networks (ANN) allows complex nonlinear relationships between the target variable and its predictors. With time series data, lagged values of the time series can be used as inputs. With seasonal data, it is also useful to also add the last observed values from the same season as inputs \cite{hyndman}. In general, the input can be expressed as:
+\[ (y_{t-1}, y_{t-2}, ..., y_{t-p}, y_{t-w}, y_{t-2w}, ..., y_{t-Pw}) \]
+where \( p \) is the number of previous lagged values and \( P \) is the number of lagged values from previous seasonal cycles to consider. \( w \) is the size in terms of number of intervals of the seasonality.
+For forecasting two steps ahead, the result of one-step forecast can be used in the input.
+\todo{RNN con LSTM layer}
 
 \subsection{ARIMA models}
+\label{subsec:arima_models}
 \emph{ARIMA (AutoRegressive Integrated Moving Average)} models provide another approach to time series forecasting. Exponential smoothing and ARIMA models are the two most widely used approaches to time series forecasting, and provide complementary approaches to the problem. While exponential smoothing models are based on a description of the trend and seasonality in the data, ARIMA models aim to describe the autocorrelations in the data.\cite{hyndman}
 
 \emph{AutoRegressive} means the model use the relationship between an observations and some number of lagged previous observations to generate a linear regression model. \emph{Integrated} refers to the use of differencing of raw observations (e.g. subtracting an observation from an observation at the previous time step) in order to make the time series stationary. A stationary time series has mean, variance and autocorrelation constant over time. \emph{Moving Average} means that the model uses the dependency between an observation and the residual error from a moving average model applied to lagged observations.
 
 The parameters of the ARIMA model are defined as follows:
 \begin{itemize}
-  \item p: The number of lagged observations included in the model, also called the lag order.
-  \item d: The number of times that the raw observations are differenced, also called the degree of differencing.
-  \item q: The size of the moving average window, also called the order of moving average.
+  \item \( p \): The number of lagged observations included in the model, also called the lag order.
+  \item \( d \): The number of times that the raw observations are differenced, also called the degree of differencing.
+  \item \( q \): The size of the moving average window, also called the order of moving average.
 \end{itemize}
 
-A simple version of the ARIMA model can be used to forecast only non-seasonal time series, but it can be extended to model seasonal patterns (SARIMA, Seasonal ARIMA). However, only a single seasonal effect can be modelled with SARIMA. A solution is to use the SARIMAX model, where the seasonal effect are used with Fourier terms as exogenous variables. This gives a better approximation and other exogenous variables could be considered (i.e. weather) to further improve it.
+A simple version of the ARIMA model can be used to forecast only non-seasonal time series, but it can be extended to model seasonal patterns (SARIMA, Seasonal ARIMA). However, only a single seasonal effect can be modelled with SARIMA. A solution is given by the SARIMAX model, that supports exogenous variables. The seasonal effects can be captured by Fourier terms and used as exogenous variables. This gives a better approximation and allows other exogenous variables to be considered (e.g. weather) to further improve the accuracy.
+
+\subsection{TBATS models}
+\label{subsec:tbats_models}
+An alternative approach proposed by De Livera et al. \cite{de_livera} uses a combination of Fourier terms with an exponential smoothing model and a Box-Cox transformation, in a completely automated manner. The main advantage of a TBATS model over a SARIMAX model with Fourier terms is that the seasonality is allowed to change slowly over time, while harmonic regression terms force the seasonal patterns to repeat periodically without changing. However, one drawback of TBATS models, is that they are slow to estimate, since they will consider various alternatives and fit different models.
 
 
 \section{Queueing theory}
@@ -60,11 +69,18 @@ A simple version of the ARIMA model can be used to forecast only non-seasonal ti
 
 \emph{Queueing theory} is the mathematical study of waiting lines, or queues. A queueing model is constructed so that queue lengths and waiting time can be predicted.
 
-There are various types of queueing models, but the best representation of a supermarket queue is probably given by the \emph{M/M/c} model, that represent a system with an infinite queue capacity, where the inflow rate follow a Poisson distribution and the service rate of the c servers follow an exponential distribution. The customers are served in FCFS order (First Come First Served).
+There are various types of queueing models, but the best representation of a supermarket queue is probably given by the \emph{M/M/c} model, that represent a system with an infinite queue capacity, where the inflow rate follow a Poisson distribution and the service times of the c servers follow an exponential distribution. The customers are served in FCFS order (First Come First Served).
 
-This model could be used to predict the queue length given the arrival rate and service time distributions.
-The main issue with this analytical approach in the context of supermarkets is that the arrival time and service time cannot be expressed with a probability distribution with constant mean, since this rates change greatly between different hours and days. The formulae provided can still be used if the measurements are in discrete intervals.
+The \emph{utilization factor} \( \rho = \frac{\lambda}{c\mu} \) describes the proportion of total service capacity being used in the system. If \( \rho >= 1\), i.e. the arrival rate exceeds the service capacity, then the queue will grow indefinitely, but if \( \rho < 1\) the system has a stationary distribution and the average queue length can be calculated.
 
+The main issue with this stationary approach in the context of supermarkets is that the arrival rate and service rate cannot be expressed with probability distributions with constant mean, since they are strongly time-dependent. Moreover, it could be possible that the utilization factor exceeds 1 for a short period of time, in which the queue length increases, and after that the system returns slowly to its equilibrium, when \( \rho < 1\). Green et al. (2001) \cite{green} shown that the commonly used SIPP approach (Stationary Independent Period by Period), where an M/M/s model is created for each interval and solved independently, is inaccurate for parameter
+values corresponding to many real situations.
+
+Rider \cite{rider} proposed an approximation of the average queue length for a M/M/1 model with time-varying parameters. He found that the average queue length \( Q(t) \) satisfies the equation:
+\[ Q(t) = \lambda(t) - \mu(t) [1 - P_0(t)] \]
+where \( P_0(t) \) is the probability of the server being in idle. This equation can be interpreted to mean that the queue will increase with the arrival rate and decrease with the service rate multiplied by an "efficiency factor" \( 1 - P_0(t) \), i.e. the probability that the server is busy at time \( t \). \( P_0(t) \) is not a priori known, thus an approximation must be used. \todo{TO DO}.
+
+Newell \cite{newell} proposed...\todo{TO DO}
 
 
 \section{Literature review}
@@ -72,6 +88,11 @@ The main issue with this analytical approach in the context of supermarkets is t
 
 There are various studies that try to analyze and predict the queue length in different settings.
 
-Aksu H. \cite{aksu} proposed a
+Berman et al. (2004) \cite{berman} developed a system that manages the switching of workers between the "front room", where the checkouts are located, and the "back room", that is the shop. This system process real-time data about the count of customers either in front and back rooms, with the goal of minimizing the customer's waiting time.
 
-\section{}
+Aksu H. (2018) \cite{aksu} main goal was to optimize the idle time of the staff operating at the checkout while maintaining the waiting queue length under a predetermined threshold. He proposed a model based on the inflow of customers at
+the entrance, the number of customers entering the checkout area, the current waiting
+queue length and number of available checkouts. He divided the supermarket area into a shop and a checkout area and used a video-based system to count the customers moving in each area. He then developed a prediction model to calculate a realistic forecast of customer dwell times. The inward flow into the checkout area was predicted using the inward flow into the shop, since the inward flow into the shop appear with a delay at the checkout area. This delay is the dwell time. To consider non-standard events, the model was adjusted with real-time measured data, to increase the prediction accuracy. Queueing theory is then used to predict the average waiting time at the checkouts. Checkouts can be opened or closed based on a minimum and maximum acceptable queue length values. To avoid closing and opening too frequently, the system is able to decide in how many cases the defined waiting queue length can be exceeded, for example when it is exceeded for a short time.
+
+
+\clearpage
