@@ -30,19 +30,47 @@ were \(M\) is the number of previous step considered.
 
 \subsection{Artificial Neural Network model}
 \label{subsec:ann_model}
-As described in Chapter \ref{subsec:artificial_neural_networks}, Artificial Neural Networks are a popular and effective forecasting technique. The input was constructed with legged values of previous observations. We can denote 
+As described in Chapter \ref{subsec:artificial_neural_networks}, Artificial Neural Networks are a popular and effective forecasting technique. We can denote an autoregressive neural network as \( \text{AR-NN}(p, P, k)_m \). Various configuration parameters were tested and the model with the best performance was used.
+\todo{Risultati performance modelli}
 
 \subsection{ARIMA model}
 \label{subsec:arima_model}
 
 \section{Arrival rate forecast}
 \label{sec:arrival_rate_forecast}
+Once an inflow rate forecasting model was defined, the measured inflow rate was combined with the predicted values and used to get a prediction of the arrival rate at the checkouts, because the inflow rate into the shop appears with a delay at the checkout area \cite{aksu}. This delay is the customer's dwell time. For such a prediction, a probability density function \( p_t(\tau) \) is required, where \( \tau \) is the dwell time of a customer.
+In Chapter \ref{sec:rates_distributions} the general distribution of the dwell time was presented and with the analysis of Chapter \ref{sec:time_series_analysis} it is clear that the average dwell time values are strongly dependent from time, thus a forecasting model for the dwell time was created.
+In Chapter \ref{sec:rates_distributions} an approximation of the dwell time distribution was given by the Erlang distribution. This approximation was used to define the function \( p_t(\tau) \) using an average of the measured data from the latest weeks as the distribution parameter and creating different values for different time intervals and days.
+Let \( \hat{\lambda}(t) \) be the predicted arrival rate for the interval \( t \), \( p_t(\tau_i) \) the probability of having a dwell time \( \tau_i = i \cdot \Delta t \), \( \Delta t \) the size of the intervals considered and \( y_{t-i} \) the inflow rate measured at time \( t-i \). We can write:
+\[ \hat{\lambda}(t) = \sum_{i=1}^{K} y_{t-i} \cdot p_t(\tau_i) \]
+where \( K \) is such that \( p_t(\tau_K) = o(0) \) \todo{Va bene come notazione??}.
+
+For a multi-step forecast for the next \( N \) intervals, we can write a linear system of equations:
+\[
+  \begin{bmatrix}\hat{\lambda}(t) \\ \hat{\lambda}(t+1) \\ \vdots \\ \hat{\lambda}(t+N)\end{bmatrix}
+  =
+  \begin{bmatrix}
+    y_{t-1}           & y_{t-2}           & \cdots & y_{t-(N+1)} \\
+    y_{t}             & y_{t-1}           & \cdots & y_{t-N}     \\
+    \hat{y}_{t+1}     & y_{t}             & \cdots & y_{t-(N-1)} \\
+    \vdots            & \vdots            & \ddots & \vdots      \\
+    \hat{y}_{t+(N-1)} & \hat{y}_{t+(N-2)} & \cdots & y_{t}
+  \end{bmatrix}
+  \begin{bmatrix}p_t(\tau_1) \\ p_t(\tau_2) \\ \vdots \\ p_t(\tau_N)\end{bmatrix}
+\]
 
 \section{Queue length forecast}
 \label{sec:queue_length_forecasting}
+This chapter describes the implemented model for forecasting the queue length at the checkouts. As described in Chapter \ref{sec:queueing_theory}, with the M/M/c model the required variables are:
+\begin{itemize}
+  \item \( \lambda(t) \): Arrival rate at the checkouts.
+  \item \( \mu(t) \): Service rate of the checkouts.
+  \item \( c(t) \): Total count of available (open) checkouts.
+\end{itemize}
 
 \subsection{Service rate approximation}
 \label{subsec:service_rate_approximation}
+
 
 \subsection{Outflow rate approximation}
 \label{subsec:outflow_rate_approximation}

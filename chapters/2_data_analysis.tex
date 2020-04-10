@@ -14,9 +14,9 @@ The distribution of inflow rates, dwell time and service time have been investig
 Different time series analysis techniques were used to extract the main components of the time series.
 
 \subsection{Time series decomposition}
-\label{subsec:autocorrelation}
+\label{subsec:time_series_decomposition}
 Decomposing the time series into different components is useful to find additional patterns and trends and to validate the previous observations. The main goal was to identify trend variations among different seasons.
-
+\todo{Seasonal component per dwell time}
 
 \subsection{Inflow rate autocorrelation}
 \label{subsec:autocorrelation}
@@ -26,8 +26,8 @@ The \emph{partial autocorrelation} is the autocorrelation between two values aft
 
 Considering more lagged values, it was clear that the time series present two main seasonalities:
 \begin{itemize}
-  \item a \emph{daily} seasonality, with a cycle length of ~150 lag (~24 hours), meaning that the periods with more or less traffic are nearly the same for each day.
-  \item a \emph{weekly} seasonality, with a cycle length of ~1000 lag (~7 days), meaning that there is a strong relation between the inflow rates for the same days in different weeks.
+  \item a \emph{daily} seasonality, with a cycle length of \( \sim150 \) lags ( \( \sim24 \) hours), meaning that the periods with more or less traffic are nearly the same for each day.
+  \item a \emph{weekly} seasonality, with a cycle length of \( \sim1000 \) lags (\( \sim7 \) days), meaning that there is a strong relation between the inflow rates for the same days in different weeks.
 \end{itemize}
 
 
