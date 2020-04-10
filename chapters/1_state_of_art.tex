@@ -19,10 +19,13 @@ A \emph{time series} is a collection of observations made sequentially through t
 
 A time series can be decomposed into four components:
 \begin{itemize}
-  \item \emph{Trend}: Linear/nonlinear increasing or decreasing behavior of the series over time.
-  \item \emph{Seasonality}: Repeating patterns or cycles behavior over time.
-  \item \emph{Noise}: Variability of the observations not explainable by the model.
+  \item \emph{Trend} \( T_t \): Linear/nonlinear increasing or decreasing behavior of the series over time.
+  \item \emph{Seasonality} \( S_t \): Repeating patterns or cycles behavior over time.
+  \item \emph{Residual} \( R_t \): Variability of the observations not explainable by the model.
 \end{itemize}
+
+There are two types of decomposition: \emph{additive}, where the time series would be written as \( y_t = T_t + S_t + R_t \), and \emph{multiplicative}, where \( y_t = T_t \cdot S_t \cdot R_t \).
+The additive decomposition is the most appropriate if the magnitude of the seasonal fluctuations, or the variation around the trend-cycle, does not vary with the level of the time series. When the variation in the seasonal pattern, or the variation around the trend-cycle, appears to be proportional to the level of the time series, then a multiplicative decomposition is more appropriate
 
 The following sections describes different techniques that can be used to obtain a forecast of the future values.
 
@@ -38,9 +41,10 @@ Taylor’s \emph{double seasonal exponential smoothing} method \cite{taylor} was
 
 \subsection{Artificial Neural Networks}
 \label{subsec:artificial_neural_networks}
-Artificial Neural Networks (ANN) allows complex nonlinear relationships between the target variable and its predictors. With time series data, lagged values of the time series can be used as inputs. With seasonal data, it is also useful to also add the last observed values from the same season as inputs \cite{hyndman}. In general, the input can be expressed as:
-\[ (y_{t-1}, y_{t-2}, ..., y_{t-p}, y_{t-w}, y_{t-2w}, ..., y_{t-Pw}) \]
-where \( p \) is the number of previous lagged values and \( P \) is the number of lagged values from previous seasonal cycles to consider. \( w \) is the size in terms of number of intervals of the seasonality.
+\emph{Artificial Neural Networks (ANN)} allows complex nonlinear relationships between the target variable and its predictors. With time series data, lagged values of the time series can be used as inputs, in what is called an \emph{Autoregressive Neural Network (AR-NN)}. With seasonal data, it is also useful to also add the last observed values from the same season as inputs \cite{hyndman}. In general, the input can be expressed as:
+\[ (y_{t-1}, y_{t-2}, ..., y_{t-p}, y_{t-m}, y_{t-2m}, ..., y_{t-Pm}) \]
+We use the notation \( \text{AR-NN}(p, P, k)_m \) to indicate a neural network with \( p \) previous lagged values and \( P \) lagged values from previous seasonal cycles in the input, \( k \) neurons in the hidden layer, and a seasonal cycle of \( m \) intervals.
+
 For forecasting two steps ahead, the result of one-step forecast can be used in the input.
 \todo{RNN con LSTM layer}
 
@@ -52,12 +56,20 @@ For forecasting two steps ahead, the result of one-step forecast can be used in 
 
 The parameters of the ARIMA model are defined as follows:
 \begin{itemize}
-  \item \( p \): The number of lagged observations included in the model, also called the lag order.
-  \item \( d \): The number of times that the raw observations are differenced, also called the degree of differencing.
-  \item \( q \): The size of the moving average window, also called the order of moving average.
+  \item \( p \): Autoregressive order, the number of lagged observations included in the model.
+  \item \( d \): Degree of differencing, the number of times that the raw observations are differenced.
+  \item \( q \): Moving average order, the size of the moving average window.
 \end{itemize}
 
-A simple version of the ARIMA model can be used to forecast only non-seasonal time series, but it can be extended to model seasonal patterns (SARIMA, Seasonal ARIMA). However, only a single seasonal effect can be modelled with SARIMA. A solution is given by the SARIMAX model, that supports exogenous variables. The seasonal effects can be captured by Fourier terms and used as exogenous variables. This gives a better approximation and allows other exogenous variables to be considered (e.g. weather) to further improve the accuracy.
+A simple version of the ARIMA model can be used to forecast only non-seasonal time series, but it can be extended to model seasonal patterns with the Seasonal ARIMA (SARIMA). There are four seasonal parameters that are not part of ARIMA that must be configured:
+\begin{itemize}
+  \item \( P \): Seasonal autoregressive order.
+  \item \( D \): Seasonal degree of differencing.
+  \item \( Q \): Seasonal moving average order.
+  \item \( m \): The number of time steps for a single seasonal period.
+\end{itemize}
+A \( \text{SARIMA}(p,0,0)(P,0,0)_m \) model is equivalent to an \( \text{AR-NN}(p,P,0)_m \) model but with a restrictions on the parameters that ensure stationarity.
+However, only a single seasonal effect can be modelled with SARIMA. A solution is given by the SARIMAX model, that supports exogenous variables. The seasonal effects can be captured by Fourier terms and used as exogenous variables. This gives a better approximation and allows other exogenous variables to be considered (e.g. weather) to further improve the accuracy.
 
 \subsection{TBATS models}
 \label{subsec:tbats_models}
@@ -73,8 +85,7 @@ There are various types of queueing models, but the best representation of a sup
 
 The \emph{utilization factor} \( \rho = \frac{\lambda}{c\mu} \) describes the proportion of total service capacity being used in the system. If \( \rho >= 1\), i.e. the arrival rate exceeds the service capacity, then the queue will grow indefinitely, but if \( \rho < 1\) the system has a stationary distribution and the average queue length can be calculated.
 
-The main issue with this stationary approach in the context of supermarkets is that the arrival rate and service rate cannot be expressed with probability distributions with constant mean, since they are strongly time-dependent. Moreover, it could be possible that the utilization factor exceeds 1 for a short period of time, in which the queue length increases, and after that the system returns slowly to its equilibrium, when \( \rho < 1\). Green et al. (2001) \cite{green} shown that the commonly used SIPP approach (Stationary Independent Period by Period), where an M/M/s model is created for each interval and solved independently, is inaccurate for parameter
-values corresponding to many real situations.
+The main issue with this stationary approach in the context of supermarkets is that the arrival rate and service rate cannot be expressed with probability distributions with constant mean, since they are strongly time-dependent. Moreover, it could be possible that the utilization factor exceeds 1 for a short period of time, in which the queue length increases, and after that the system returns slowly to its equilibrium, when \( \rho < 1\). Green et al. (1991) \todo {TODO}. Green et al. (2001) \cite{green2001} shown that the commonly used SIPP approach (Stationary Independent Period by Period), where an M/M/s model is created for each interval and solved independently, is inaccurate for parameter values corresponding to many real situations.\todo {TODO}
 
 Rider \cite{rider} proposed an approximation of the average queue length for a M/M/1 model with time-varying parameters. He found that the average queue length \( Q(t) \) satisfies the equation:
 \[ Q(t) = \lambda(t) - \mu(t) [1 - P_0(t)] \]

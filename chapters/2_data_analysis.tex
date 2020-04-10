@@ -2,11 +2,33 @@
 \label{cha:data_analysis}
 
 This chapter describes the analysis conducted.
+Two different dataset were analyzed...
 
-\section{Datasets description}
-\label{sec:datasets_description}
 
 \section{Inflow rate, dwell time and service time distributions}
 \label{sec:rates_distributions}
+The distribution of inflow rates, dwell time and service time have been investigated.
+
+\section{Time series analysis}
+\label{sec:time_series_analysis}
+Different time series analysis techniques were used to extract the main components of the time series.
+
+\subsection{Time series decomposition}
+\label{subsec:autocorrelation}
+Decomposing the time series into different components is useful to find additional patterns and trends and to validate the previous observations. The main goal was to identify trend variations among different seasons.
+
+
+\subsection{Inflow rate autocorrelation}
+\label{subsec:autocorrelation}
+To identify the number of previous values that directly influence the current value, the \emph{autocorrelation} of the inflow rate has been calculated. This measurement is useful to identify a first set of relevant features to be used in the forecast model.
+Autocorrelation refers to the degree of correlation between the values of the same variables across different past observations in the data. It measure the linear relationship between a variable's current value and its past values. The autocorrelation values can range from -1 to +1, where +1 represent a perfect positive correlation (an increase in one of the value leads to a proportional increase in the other value), -1 represent a perfect negative correlation and 0 represent no linear correlation.
+The \emph{partial autocorrelation} is the autocorrelation between two values after removing any linear dependence on the values between them.
+
+Considering more lagged values, it was clear that the time series present two main seasonalities:
+\begin{itemize}
+  \item a \emph{daily} seasonality, with a cycle length of ~150 lag (~24 hours), meaning that the periods with more or less traffic are nearly the same for each day.
+  \item a \emph{weekly} seasonality, with a cycle length of ~1000 lag (~7 days), meaning that there is a strong relation between the inflow rates for the same days in different weeks.
+\end{itemize}
+
 
 \clearpage
