@@ -30,8 +30,8 @@ were \(M\) is the number of previous step considered.
 
 \subsection{Artificial Neural Network model}
 \label{subsec:ann_model}
-As described in Chapter \ref{subsec:artificial_neural_networks}, Artificial Neural Networks are a popular and effective forecasting technique. We can denote an autoregressive neural network as \( \text{AR-NN}(p, P, k)_m \). Various configuration parameters were tested and the model with the best performance was used.
-\todo{Risultati performance modelli}
+As described in Chapter \ref{subsec:artificial_neural_networks}, Artificial Neural Networks are a popular and effective time series forecasting technique. We can denote an autoregressive neural network as \( \text{AR-NN}(p, P, k)_m \). Various configuration parameters were tested and the model with the best performance was used.
+% //TODO: Risultati performance modelli
 
 \subsection{ARIMA model}
 \label{subsec:arima_model}
@@ -43,7 +43,7 @@ In Chapter \ref{sec:rates_distributions} the general distribution of the dwell t
 In Chapter \ref{sec:rates_distributions} an approximation of the dwell time distribution was given by the Erlang distribution. This approximation was used to define the function \( p_t(\tau) \) using an average of the measured data from the latest weeks as the distribution parameter and creating different values for different time intervals and days.
 Let \( \hat{\lambda}(t) \) be the predicted arrival rate for the interval \( t \), \( p_t(\tau_i) \) the probability of having a dwell time \( \tau_i = i \cdot \Delta t \), \( \Delta t \) the size of the intervals considered and \( y_{t-i} \) the inflow rate measured at time \( t-i \). We can write:
 \[ \hat{\lambda}(t) = \sum_{i=1}^{K} y_{t-i} \cdot p_t(\tau_i) \]
-where \( K \) is such that \( p_t(\tau_K) = o(0) \) \todo{Va bene come notazione??}.
+where \( K \) is such that \( p_t(\tau_K) = o(0) \) % //TODO: Va bene come notazione??.
 
 For a multi-step forecast for the next \( N \) intervals, we can write a linear system of equations:
 \[
