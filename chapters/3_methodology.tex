@@ -78,6 +78,25 @@ This chapter describes the implemented model for forecasting the queue length at
 \section{Checkouts optimization}
 \label{sec:checkouts_optimization}
 
+\subsection{Optimal checkouts configuration}
+\label{subsec:optimal_checkouts_configuration}
+
+\begin{algorithm}[H]
+  $ c \gets c_t$\;
+  \If{\FuncSty{Ls($c$)} $ > Ls_{max}$}{
+    \While{$ c \leq c_{max} $ \KwSty{and} \FuncSty{Ls($c$)} $ > Ls_{max} $}{
+      $ c \gets c + 1 $\;
+    }
+  }
+  \Else{
+    \While{$ c \ge 1 $ \KwSty{and} \FuncSty{Ls($c$)} $ < Ls_{max}$}{
+      $ c \gets c - 1 $\;
+    }
+    $ c \gets c + 1 $\;
+  }
+\end{algorithm}
+
+
 \subsection{Opening/closing fluctuations control}
 \label{subsec:opening_closing_fluctuations_control}
 
