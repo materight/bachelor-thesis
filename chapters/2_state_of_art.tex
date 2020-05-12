@@ -91,40 +91,40 @@ An alternative approach proposed by De Livera et al. \cite{de_livera} uses a com
 
 \emph{Queueing theory} is the mathematical study of waiting lines, or queues. A queueing model is constructed so that queue lengths and waiting time can be predicted.
 
-Queueing theory is the mathematical study of waiting lines, or queues. A queueing model is constructed so that queue lengths and waiting time can be predicted. There are various types of queueing models. Kendall's notation is the standard system used to describe and classify these models. In 1953, Kendall [7] proposed to describe queueing models using four factors, written as $$ A/S/c/K $$, where:
+Queueing theory is the mathematical study of waiting lines, or queues. A queueing model is constructed so that queue lengths and waiting time can be predicted. There are various types of queueing models. Kendall's notation is the standard system used to describe and classify these models. In 1953, Kendall [7] proposed to describe queueing models using four factors, written as $ A/S/c/K $, where:
 \begin{itemize}
-  \item $$ A $$ denotes the time distribution between arrivals to the queue
-  \item $$ S $$ denotes the service time distribution
-  \item $$ c $$ denotes the number of open servers
-  \item $$ K $$ denotes the maximum capacity of the queue. If not specified it is assumed $$ K = \infty $$
+  \item $ A $ denotes the time distribution between arrivals to the queue
+  \item $ S $ denotes the service time distribution
+  \item $ c $ denotes the number of open servers
+  \item $ K $ denotes the maximum capacity of the queue. If not specified it is assumed $ K = \infty $
 \end{itemize}
 
-The best representation of a supermarket queue is probably given by the $$ M/M/c $$ model, where the $$ M $$ denote a Markovian process, meaning that the inter-arrival times and the service times of the $$ c $$ servers are exponentially distributed. The customers are served in FCFS order (First Come First Served).
-The utilization factor $$ \rho = \lambda/c\mu $$ describes the proportion of total service capacity being used in the system, where:
+The best representation of a supermarket queue is probably given by the $ M/M/c $ model, where the $ M $ denote a Markovian process, meaning that the inter-arrival times and the service times of the $ c $ servers are exponentially distributed. The customers are served in FCFS order (First Come First Served).
+The utilization factor $ \rho = \lambda/c\mu $ describes the proportion of total service capacity being used in the system, where:
 \begin{itemize}
-  \item $$ \lambda $$ is the average arrival rate
-  \item $$ \mu $$ is the average service rate of a single server
-  \item $$ c $$ is the number of available servers
+  \item $ \lambda $ is the average arrival rate
+  \item $ \mu $ is the average service rate of a single server
+  \item $ c $ is the number of available servers
 \end{itemize}
 
-If $$ \rho >= 1 $$, i.e. the arrival rate exceeds the total service capacity, then the queue will grow indefinitely, but if $$ \rho < 1 $$ the system is stable and the average queue length can be calculated.
+If $ \rho >= 1 $, i.e. the arrival rate exceeds the total service capacity, then the queue will grow indefinitely, but if $ \rho < 1 $ the system is stable and the average queue length can be calculated.
 
-The main issue with this stationary approach in the context of supermarkets is that the arrival rate and the number of available terminals cannot be expressed with probability distributions with constant mean, since they are strongly time-dependent, thus non-stationary. We can denote such time-varying model as $$ M(t)/M/c(t) $$. Moreover, it could be possible that the utilization factor exceeds 1 for a short period of time (overloading), in which the queue length increases, and after that, when $$ \rho < 1 $$, the system returns slowly to its equilibrium.
+The main issue with this stationary approach in the context of supermarkets is that the arrival rate and the number of available terminals cannot be expressed with probability distributions with constant mean, since they are strongly time-dependent, thus non-stationary. We can denote such time-varying model as $ M(t)/M/c(t) $. Moreover, it could be possible that the utilization factor exceeds 1 for a short period of time (overloading), in which the queue length increases, and after that, when $ \rho < 1 $, the system returns slowly to its equilibrium.
 
-A common approach for dealing time-varying rates is the Stationary Independent Period by Period (SIPP) approach, where the analysis is conducted on small intervals. For each interval, a different $$ M/M/c $$ model with constant arrival rates and constant number of available servers is created and solved with the stationary approach. However, Green et al. (2001) [8] showed that the commonly used SIPP approach is inaccurate for parameter values corresponding to many real situations, even when the time-dependent variations are small and especially for systems which operate near the critical load. Moreover, this stationary analysis requires the arrival rate to be strictly smaller than the service rate, i.e. $$ \rho < 1 $$ must hold for every interval, while many real systems can be temporarily overloaded.
+A common approach for dealing time-varying rates is the Stationary Independent Period by Period (SIPP) approach, where the analysis is conducted on small intervals. For each interval, a different $ M/M/c $ model with constant arrival rates and constant number of available servers is created and solved with the stationary approach. However, Green et al. (2001) [8] showed that the commonly used SIPP approach is inaccurate for parameter values corresponding to many real situations, even when the time-dependent variations are small and especially for systems which operate near the critical load. Moreover, this stationary analysis requires the arrival rate to be strictly smaller than the service rate, i.e. $ \rho < 1 $ must hold for every interval, while many real systems can be temporarily overloaded.
 
-Green et al. [9] proposed an easy-to-compute approximation for determining long run average performance measures for multi-server queues with periodic arrival rates, the Pointwise Stationary Approximation (PSA). This approximation was obtained by computing the expectation of the performance measure over the time interval using the stationary formula with the arrival rate that corresponds to each point in time. They showed that this approximation is an upper bound for the expected number of customers in the queue. However again, the PSA approach can only be applied to systems where $$ \rho < 1 $$ hold, i.e. temporal overloading in some intervals is strictly forbidden [10].
+Green et al. [9] proposed an easy-to-compute approximation for determining long run average performance measures for multi-server queues with periodic arrival rates, the Pointwise Stationary Approximation (PSA). This approximation was obtained by computing the expectation of the performance measure over the time interval using the stationary formula with the arrival rate that corresponds to each point in time. They showed that this approximation is an upper bound for the expected number of customers in the queue. However again, the PSA approach can only be applied to systems where $ \rho < 1 $ hold, i.e. temporal overloading in some intervals is strictly forbidden [10].
 
-Rider [11] proposed an approximation of the average queue length for a $$ M/M/1 $$ model with time-varying parameters. He found that the average queue length $$ Q(t) $$ satisfies the equation:
+Rider [11] proposed an approximation of the average queue length for a $ M/M/1 $ model with time-varying parameters. He found that the average queue length $ Q(t) $ satisfies the equation:
 
-$$ Q(t) = \lambda(t) - \mu(t) [1 - P_0(t)] $$
+$ Q(t) = \lambda(t) - \mu(t) [1 - P_0(t)] $
 
-where $$ P_0(t) $$ is the probability of the server being idle. This equation can be interpreted to mean that the queue will increase with the arrival rate and decrease with the service rate multiplied by an "efficiency factor" $$ 1 - P_0(t) $$, i.e. the probability that the server is busy at time $$ t $$. $$ P_0(t) $$ is not a priori known, thus an approximation must be used.
+where $ P_0(t) $ is the probability of the server being idle. This equation can be interpreted to mean that the queue will increase with the arrival rate and decrease with the service rate multiplied by an "efficiency factor" $ 1 - P_0(t) $, i.e. the probability that the server is busy at time $ t $. $ P_0(t) $ is not a priori known, thus an approximation must be used.
 
-Stolletz [10] proposed an improvement of the SIPP approach, the Stationary Backlog-Carryover (SBC) approach. This approach was designed for systems with temporal overloading, thus the models of consecutive periods are no longer independent from each other. Contrary to the SIPP approach that applies the $$ M/M/c/\infty $$ model to each interval, SBC utilizes the $$ M/M/c/c $$ model, also known as the Erlang’s B model, meaning that a maximum number of  $$ c $$ customers can be in the queue at any time and any further arrivals to the queue are considered blocked (i.e. lost) and carried over into future periods. This is obtained by defining an artificial arrival rate $$ \widetilde{\lambda}(t) $$ that consists of both the original arrival rate $$ \lambda(t) $$ and a backlog rate $$ b(t) $$ of the previous period, that is the rate of blocked customers leaving the $$ M/M/c/c $$system at time $$ t $$.
+Stolletz [10] proposed an improvement of the SIPP approach, the Stationary Backlog-Carryover (SBC) approach. This approach was designed for systems with temporal overloading, thus the models of consecutive periods are no longer independent from each other. Contrary to the SIPP approach that applies the $ M/M/c/\infty $ model to each interval, SBC utilizes the $ M/M/c/c $ model, also known as the Erlang’s B model, meaning that a maximum number of  $ c $ customers can be in the queue at any time and any further arrivals to the queue are considered blocked (i.e. lost) and carried over into future periods. This is obtained by defining an artificial arrival rate $ \widetilde{\lambda}(t) $ that consists of both the original arrival rate $ \lambda(t) $ and a backlog rate $ b(t) $ of the previous period, that is the rate of blocked customers leaving the $ M/M/c/c $system at time $ t $.
 
-Once the average queue length has been determined with one of the aforementioned methods, the average waiting time in the queue can be calculated using Little’s Law [12]. This law states that the average number of customers in a stationary system $$ L_s $$ is equal to the arrival rate $$ \lambda $$ multiplied by the average time $$ W_s $$ that a customer spends in the system:
+Once the average queue length has been determined with one of the aforementioned methods, the average waiting time in the queue can be calculated using Little’s Law [12]. This law states that the average number of customers in a stationary system $ L_s $ is equal to the arrival rate $ \lambda $ multiplied by the average time $ W_s $ that a customer spends in the system:
 
-$$ L_s = \lambda W_s $$
+$ L_s = \lambda W_s $
 
 \clearpage

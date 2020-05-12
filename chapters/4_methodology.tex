@@ -12,30 +12,30 @@ The inflow rate can be expressed as a time series, hence time series forecasting
 
 \subsection{Persistence model}
 \label{subsec:persistence_model}
-The first model tested was used to define a baseline in performance. This gives an idea of how well the other models could perform on the time series, and if a model’s performance is worse than this baseline it should not be considered. The baseline was obtained by a persistence model, were the last measured value $$ y_{t-1} $$ is used as forecast:
-$$ \hat{y}_t = y_{t-1} $$
+The first model tested was used to define a baseline in performance. This gives an idea of how well the other models could perform on the time series, and if a model’s performance is worse than this baseline it should not be considered. The baseline was obtained by a persistence model, were the last measured value $ y_{t-1} $ is used as forecast:
+$ \hat{y}_t = y_{t-1} $
 
 \subsection{Naïve model}
 \label{subsec:naive_model}
 As seen in Chapter 3, the arrival rate time series presents a strong seasonal component, so the forecast should be based on this repeating pattern. The forecast value was calculated as the average of the values in the previous weeks for the same day and time:
 
-$$ \hat{y}_t = \hat{f}(t) = \frac{1}{N} \sum_{i=1}^{N} y_{t-iW} $$
+$ \hat{y}_t = \hat{f}(t) = \frac{1}{N} \sum_{i=1}^{N} y_{t-iW} $
 
-where $$ W $$ is the number of intervals in a week and $$ N $$ is the number of previous weeks considered.
+where $ W $ is the number of intervals in a week and $ N $ is the number of previous weeks considered.
 
 To take in account the variations in the inflow rate that can be caused by external factors, e.g. holidays, a local drift was calculated, using the errors of the forecasted values for the immediate past:
 
-$$ \hat{y}_t = \hat{f}(t) + \frac{1}{M} \sum_{i=1}^{M} y_{t-i} - \hat{f}(t-i) $$
+$ \hat{y}_t = \hat{f}(t) + \frac{1}{M} \sum_{i=1}^{M} y_{t-i} - \hat{f}(t-i) $
 
-were $$ M $$is the number of previous steps to be considered in the drift.
+were $ M $is the number of previous steps to be considered in the drift.
 
 
 \subsection{Artificial Neural Network model}
 \label{subsec:ann_model}
-As described in Chapter 2.2.2, Artificial Neural Networks are a popular and effective time series forecasting technique. We can denote an autoregressive neural network as $$ \text{AR-NN}(p, P, k)_m $$.
-Since the inflow rate values present a strong correlation with the previous values, as seen in Chapter 3.3.2, the time series is non-stationary, so the dataset must be rendered stationary before training the model. This was done by differencing the time series, i.e. by calculating the difference between consecutive observations (also called first-order differencing). Each value of the differenced time series can be written as $$ y'_t = y_t - y_{t-1} $$. This transformation can help stabilise the mean of a time series, and therefore reduce the effects of trend and seasonalities. Since the time series present a strong seasonal component, a seasonal differencing was also applied, written as $$ y'_t = y_t - y_{t-m} $$ where $$ m $$ is the number of lags in a seasonal cycle. Since the daily seasonality was taken in account, $$ m = 144 $$. Both differences were applied to obtain stationarity, so the final time series used to train the the model was:
+As described in Chapter 2.2.2, Artificial Neural Networks are a popular and effective time series forecasting technique. We can denote an autoregressive neural network as $ \text{AR-NN}(p, P, k)_m $.
+Since the inflow rate values present a strong correlation with the previous values, as seen in Chapter 3.3.2, the time series is non-stationary, so the dataset must be rendered stationary before training the model. This was done by differencing the time series, i.e. by calculating the difference between consecutive observations (also called first-order differencing). Each value of the differenced time series can be written as $ y'_t = y_t - y_{t-1} $. This transformation can help stabilise the mean of a time series, and therefore reduce the effects of trend and seasonalities. Since the time series present a strong seasonal component, a seasonal differencing was also applied, written as $ y'_t = y_t - y_{t-m} $ where $ m $ is the number of lags in a seasonal cycle. Since the daily seasonality was taken in account, $ m = 144 $. Both differences were applied to obtain stationarity, so the final time series used to train the the model was:
 
-$$ y''_t = y'_t - y'_{t-1} = (y_t - y_{t-m}) - (y_{t-1} - y_{t-m-1}) $$
+$ y''_t = y'_t - y'_{t-1} = (y_t - y_{t-m}) - (y_{t-1} - y_{t-m-1}) $
 
 Various configuration parameters were tested and the model with the best performance was used.
 
@@ -44,20 +44,20 @@ Various configuration parameters were tested and the model with the best perform
 
 \section{Arrival rate forecast}
 \label{sec:arrival_rate_forecast}
-Once an inflow rate forecasting model was defined, the measured and predicted inflow rates were combined and used to get a prediction of the arrival rate at the checkouts. The inflow rate into the shop appears with a delay at the checkout area and this delay is the customer's dwell time [2]. For such a prediction, a time-dependent probability density function $$ p_t(\tau) $$ is required, where $$ \tau $$ is the expected dwell time of a customer.
+Once an inflow rate forecasting model was defined, the measured and predicted inflow rates were combined and used to get a prediction of the arrival rate at the checkouts. The inflow rate into the shop appears with a delay at the checkout area and this delay is the customer's dwell time [2]. For such a prediction, a time-dependent probability density function $ p_t(\tau) $ is required, where $ \tau $ is the expected dwell time of a customer.
 
-In Chapter 3.1 the general distribution of the dwell time was presented and with the analysis of Chapter 3.2 it is clear that the average dwell time values are strongly time-dependent, thus it can be seen as a stochastic process $$ \{ X_t \} $$ with $$ X_t \sim \text{Erlang}(k_t, n_t) $$, where $$ k_t = \text{E}[X_t]^2 / \text{Var}[X_t] $$ and $$ n_t =  \text{E}[X_t] / \text{Var}[X_t] $$. Given the weekly and daily seasonality of the time series, different $$ X_t $$ distributions are defined for each interval on each day of the week, for a total of $$ 7 \cdot 24 \cdot 6 = 1008 $$ distributions, since intervals of 10 minutes are considered. Each aforementioned distribution was obtained by calculating the values for $$ \text{E}[X_t] $$ and $$ \text{Var}[X_t] $$ from the past observations of the same interval and day. A maximum dwell time value $$ \tau_{max} $$ has also to be defined, either by a customizable parameter or by analysing the dwell time distribution (e.g. using the 95th percentile).
+In Chapter 3.1 the general distribution of the dwell time was presented and with the analysis of Chapter 3.2 it is clear that the average dwell time values are strongly time-dependent, thus it can be seen as a stochastic process $ \{ X_t \} $ with $ X_t \sim \text{Erlang}(k_t, n_t) $, where $ k_t = \text{E}[X_t]^2 / \text{Var}[X_t] $ and $ n_t =  \text{E}[X_t] / \text{Var}[X_t] $. Given the weekly and daily seasonality of the time series, different $ X_t $ distributions are defined for each interval on each day of the week, for a total of $ 7 \cdot 24 \cdot 6 = 1008 $ distributions, since intervals of 10 minutes are considered. Each aforementioned distribution was obtained by calculating the values for $ \text{E}[X_t] $ and $ \text{Var}[X_t] $ from the past observations of the same interval and day. A maximum dwell time value $ \tau_{max} $ has also to be defined, either by a customizable parameter or by analysing the dwell time distribution (e.g. using the 95th percentile).
 
-Let $$ \lambda(t) $$ be the predicted arrival rate for the time interval $$ t $$, $$ p_t(\tau_i) $$ the probability of having a dwell time of $$ \tau_i $$ such that $$ (i-1) \Delta t < \tau_i \leq i \Delta t $$, $$ \Delta t $$ the intervals size and $$ y_{t-i} $$ the measured inflow rate at time $$ t-i $$. We can write:
-$$ \lambda(t) = \sum_{i=1}^{K} y_{t-i} \cdot p_t(\tau_i) $$
-where $$ K $$ is such that $$ \tau_K \leq \tau_{max} \leq \tau_{k+1}  $$. However, this equation is applicable only if $$ y_{t-1}, y_{t-2}, ..., y_{y-K} $$ are known, thus only when $$ t \leq t_{now} $$. If $$ t > t_{now} $$, the forecast of the inflow rate described in Chapter 4.1 must be used. For this reason, we define the function $$ \text{in}(t) $$ as:
+Let $ \lambda(t) $ be the predicted arrival rate for the time interval $ t $, $ p_t(\tau_i) $ the probability of having a dwell time of $ \tau_i $ such that $ (i-1) \Delta t < \tau_i \leq i \Delta t $, $ \Delta t $ the intervals size and $ y_{t-i} $ the measured inflow rate at time $ t-i $. We can write:
+$ \lambda(t) = \sum_{i=1}^{K} y_{t-i} \cdot p_t(\tau_i) $
+where $ K $ is such that $ \tau_K \leq \tau_{max} \leq \tau_{k+1}  $. However, this equation is applicable only if $ y_{t-1}, y_{t-2}, ..., y_{y-K} $ are known, thus only when $ t \leq t_{now} $. If $ t > t_{now} $, the forecast of the inflow rate described in Chapter 4.1 must be used. For this reason, we define the function $ \text{in}(t) $ as:
 
 
-where $$ y_t $$ and $$ \hat{y}_t $$ are respectively the measured and predicted inflow rate at time $$ t $$. The previous equation is therefore rewritten as:
+where $ y_t $ and $ \hat{y}_t $ are respectively the measured and predicted inflow rate at time $ t $. The previous equation is therefore rewritten as:
 
-$$ \lambda(t) = \sum_{i=1}^{K} \text{in}(t-i) \cdot p_t(\tau_i) $$
+$ \lambda(t) = \sum_{i=1}^{K} \text{in}(t-i) \cdot p_t(\tau_i) $
 
-For a multi-step forecast of the next $$ N $$ intervals, we can write a linear system of equations:
+For a multi-step forecast of the next $ N $ intervals, we can write a linear system of equations:
 
 \[
   \begin{bmatrix}\hat{\lambda}(t) \\ \hat{\lambda}(t+1) \\ \vdots \\ \hat{\lambda}(t+N)\end{bmatrix}
@@ -88,27 +88,27 @@ In Chapter 3.3.3 various possible approximations of service times were introduce
 
 \subsection{Queue length approximation}
 \label{subsec:queue_length_approximation}
-As described in Chapter 2.3 the standard queueing theory does not support time-varying arrival rates and temporal overloading. The only approach that seemed to fit the context of this research was the SBC (Stationary Backlog-Carryover) approach proposed by Stolletz [10]. SBC is based on a $$ M/M/c/c $$ model and uses an artificial arrival rate $$ \widetilde{\lambda}_t $$ to take in account the temporal overloading of the queue, allowing standard queueing models to be used. The $$ \widetilde{\lambda}_t $$ value consists of both the average arrival rate $$ \lambda_t $$ and the backlog rate of the previous period $$ b_{t-1} $$, that is the rate of customers leaving the system due to blocking in the former period.
-Let $$ P_t(B) $$ be the steady-state probability of blocking for the $$ M/M/c/c $$model in period $$ t $$ with artificial arrival rate $$ \widetilde{\lambda}_t $$. The backlog rate $$ b_t $$ is given by
+As described in Chapter 2.3 the standard queueing theory does not support time-varying arrival rates and temporal overloading. The only approach that seemed to fit the context of this research was the SBC (Stationary Backlog-Carryover) approach proposed by Stolletz [10]. SBC is based on a $ M/M/c/c $ model and uses an artificial arrival rate $ \widetilde{\lambda}_t $ to take in account the temporal overloading of the queue, allowing standard queueing models to be used. The $ \widetilde{\lambda}_t $ value consists of both the average arrival rate $ \lambda_t $ and the backlog rate of the previous period $ b_{t-1} $, that is the rate of customers leaving the system due to blocking in the former period.
+Let $ P_t(B) $ be the steady-state probability of blocking for the $ M/M/c/c $model in period $ t $ with artificial arrival rate $ \widetilde{\lambda}_t $. The backlog rate $ b_t $ is given by
 
 $$ b_t = \widetilde{\lambda}_t \cdot P_t(B) $$
 
-This blocked customers are carried over into period $$ t+1$$, which results in the artificial arrival rate $$ \widetilde{\lambda}_{t+1} $$.
-Starting with $$ \widetilde{\lambda}_1 = \lambda_1 $$ and $$ b_0 = 0 $$, we can define the artificial arrival rate recursively through:
+This blocked customers are carried over into period $ t+1$, which results in the artificial arrival rate $ \widetilde{\lambda}_{t+1} $.
+Starting with $ \widetilde{\lambda}_1 = \lambda_1 $ and $ b_0 = 0 $, we can define the artificial arrival rate recursively through:
 
 $$ \widetilde{\lambda}_t = \lambda_t + b_{t-1} = \lambda_t + \widetilde{\lambda}_{t-1} \cdot P_{t-1}(B) $$
 
-By doing this, the customers not served in period $$ t-1 $$ are evenly spread over period $$ t $$. The value for $$ P_t(B) $$ is obtained by the Erlang’s loss formula:
+By doing this, the customers not served in period $ t-1 $ are evenly spread over period $ t $. The value for $ P_t(B) $ is obtained by the Erlang’s loss formula:
 
 $$ P_t(B) = \frac{(\widetilde{\lambda}_t / \mu_t)^{c_t}}{c_t!\sum_{k=0}^{c_t} \frac{(\widetilde{\lambda}_t / \mu_t)}{k!} } $$
 
-The expected servers utilization $$ \rho_t $$ can then be calculated as:
+The expected servers utilization $ \rho_t $ can then be calculated as:
 
 $$ \rho_t = \frac{\widetilde{\lambda}_t(1 - P_t(B))}{c_t\mu_t} = \frac{\widetilde{\lambda}_t - b_t}{c_t\mu_t} = \frac{\lambda_t + b_{t-1} - b_t}{c_t\mu_t} $$ (1)
 
-Stolletz [10] proposed two different approximations for the expected number of customers in the queue, one based on a modified arrival rate (MAR) and the other based on $$ \rho_t $$ and $$ b_t $$.
+Stolletz [10] proposed two different approximations for the expected number of customers in the queue, one based on a modified arrival rate (MAR) and the other based on $ \rho_t $ and $ b_t $.
 
-The MAR approach is based on the analysis of a $$ M/M/c/\infty $$ queueing model with the same utilization value as the $$ M/M/c/c $$ model analyzed in the previous step. To do so, a modified arrival rate $$ \lambda_t^{MAR} $$ is chosen such that the model reach the approximated utilization $$ \rho_t $$, given by:
+The MAR approach is based on the analysis of a $ M/M/c/\infty $ queueing model with the same utilization value as the $ M/M/c/c $ model analyzed in the previous step. To do so, a modified arrival rate $ \lambda_t^{MAR} $ is chosen such that the model reach the approximated utilization $ \rho_t $, given by:
 
 $$ \lambda_t^{MAR} = \rho_t c_t \mu_t $$
 
@@ -116,25 +116,25 @@ Applying (1) results in:
 
 $$ \lambda_t^{MAR} = \lambda_t + b_{t-1} - b_t $$
 
-The expected number of customers in the system $$ Ls_t $$ can then be obtained by resolving the specific formula for the $$ M/M/c/\infty $$ model:
+The expected number of customers in the system $ Ls_t $ can then be obtained by resolving the specific formula for the $ M/M/c/\infty $ model:
 
 $$ Ls_t^{MAR} = c_t\rho_t + \frac{\rho_t}{1-\rho_t} \pi_{c_t^+} $$
-where $$ \pi_{c_t^+} $$ is the probability of having all the $$ c_t $$ servers occupied:
+where $ \pi_{c_t^+} $ is the probability of having all the $ c_t $ servers occupied:
 
-$$ \pi_{c_t^+} = \frac{(c_t\rho_t)^{c_t}}{c_t!(1-\rho_t)}\pi_0$$
+$$ \pi_{c_t^+} = \frac{(c_t\rho_t)^{c_t}}{c_t!(1-\rho_t)}\pi_0 $$
 
-and $$ \pi_0 $$ denotes the probability of having $$ 0 $$ customers in the system:
+and $ \pi_0 $ denotes the probability of having $ 0 $ customers in the system:
 
 $$ \pi_0 = \left[ \sum_{k=0}^{c_t-1} \frac{(c_t\rho)^k}{k!} + \frac{(c_t\rho)^{c_t}}{c_t!} \frac{1}{1-\rho_t} \right]^{-1} $$
 
-The alternative approach proposed approximates the expected queue length with the number of backlogged customers during a period (approximation A1).The backlog rate $$ b_t $$ is multiplied by the period length $$ \Delta t $$ to obtain the number of waiting customers at the end of period $$ t $$. The expected queue length $$ Lq_t^{A1} $$ is given by:
+The alternative approach proposed approximates the expected queue length with the number of backlogged customers during a period (approximation A1).The backlog rate $ b_t $ is multiplied by the period length $ \Delta t $ to obtain the number of waiting customers at the end of period $ t $. The expected queue length $ Lq_t^{A1} $ is given by:
 
 $$ Lq_t^{A1} = b_t \Delta t $$
-and the total number of customers in the system $$ Ls_t^{A1} $$ by:
+and the total number of customers in the system $ Ls_t^{A1} $ by:
 
 $$ Ls_t^{A1} = Lq_t^{A1} + c_t \rho_t $$
 
-They showed that the expected queue length is often overestimated by the A1 approximation. A better approximation A2 was obtained by reducing the approximated $$ Lq_t^{A1} $$ value by the expected number of non-busy servers $$ c_t (1 - \rho_t) $$, such that:
+They showed that the expected queue length is often overestimated by the A1 approximation. A better approximation A2 was obtained by reducing the approximated $ Lq_t^{A1} $ value by the expected number of non-busy servers $ c_t (1 - \rho_t) $, such that:
 
 $$ Lq_t^{A2} = max\{0, Lq_t^{A1} - c_t (1 - \rho_t)\} $$
 
@@ -142,9 +142,9 @@ and
 
 $$ Ls_t^{A2} = Lq_t^{A2} + c_t \rho_t $$
 
-Using Little’s Law [12], the expected waiting time in the queue $$ Wq_t $$ and in the system $$ Ws_t $$ can be then calculated as:
+Using Little’s Law [12], the expected waiting time in the queue $ Wq_t $ and in the system $ Ws_t $ can be then calculated as:
 
-$$ Wq_t = Lq_t / \lambda^{MAR}_t$$
+$$ Wq_t = Lq_t / \lambda^{MAR}_t $$
 $$ Ws_t = Ls_t / \lambda^{MAR}_t $$
 
 
@@ -173,5 +173,9 @@ In the previous section various approximations of the average queue length were 
 
 \subsection{Opening/closing fluctuations control}
 \label{subsec:opening_closing_fluctuations_control}
+
+To avoid opening and closing checkouts too frequently, an additional control has to be implemented. For example, the maximum waiting time threshold can be exceeded for a short period of time. The system has to evaluate if it is necessary to change the status in a new state which is persistent for relevant time periods, or transient just for short time periods. If such a trend is not persistent, there should be no changes in the actual number of open checkouts.
+To do so, a multi-step forecast must be implemented. For example, let $ \hat{c}_{t+1} $ be the forecasted optimal configuration and $ c_t $ the current configuration. If $ \hat{c}_{t+1} > c_t $ the values for $ \hat{c}_{t+2}, \hat{c}_{t+3}, ..., \hat{c}_{t+n} $ must be calculated to make a decision. If the trend is not persistent, e.g. $ \hat{c}_{t+2} = c_t $, there should be no changes in the configuration. The number of future steps to analyze $ n $ should be a configurable parameter of the model.
+
 
 \clearpage
