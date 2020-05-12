@@ -3,17 +3,10 @@
 
 \addcontentsline{toc}{chapter}{Abstract}
 
-Long waiting queues at the checkouts are one of the major causes of customer dissatisfaction in retailing. One way to increase customers' satisfaction may be to prevent waiting queues before they appear, increasing the number of open terminals according to the predicted inflow of people at the checkouts. However, keeping a checkout open has a cost in terms of manned staff, thus an optimisation which takes in account both cost and customers satisfaction is necessary.
+Long waiting queues at the checkouts are one of the major causes of customer dissatisfaction in retailing. One way to increase customers' satisfaction may be to prevent waiting queues before they appear, increasing the number of open terminals according to the predicted inflow of people at the checkouts. However, keeping a checkout open has a cost in terms of manned staff, thus an optimization which takes in account both cost and customers satisfaction is necessary.
 The main objective of this thesis is to develop a predictive model of the queueing behavior in a retail store that could be used to anticipate near-term arrival rates at the checkouts, supporting the management in a more efficient pre-positioning of the staff to avoid queues. The system should also suggest an optimal checkouts configuration, minimizing the cost while maintaining the waiting times of the customers under a maximum acceptable threshold. The main hypothesis behind this approach is that it is possible to decrease the total manned time of the staff at the checkouts without any loss of customer satisfaction, i.e. without increasing the waiting time past an “unacceptable” value.
 The analyses were conducted with real-world data from the RetailerIN system, that tracks in real-time the movements of the customers in a supermarket and provides insightful information about the customers’ shopping behaviour.
-
-Il sommario dell’elaborato consiste al massimo di 3 pagine e deve contenere le seguenti informazioni:
-\begin{itemize}
-  \item contesto e motivazioni
-  \item breve riassunto del problema affrontato
-  \item tecniche utilizzate e/o sviluppate
-  \item risultati raggiunti, sottolineando il contributo personale del laureando/a
-\end{itemize}
+A model was developed in order to get an accurate forecast of the queue length and used to determine the best checkouts configuration. First, a predictive model for the number of customers entering the store, also called inflow rate, based on the data of past weeks, was created in order to achieve a multi-step forecast. Then, the measured and predicted inflow rates were then combined with the dwell time distributions to get a near-term forecast of the arrival rates at the checkouts. Finally, the expected value of the queue length and waiting time can be calculated by applying queueing theory. Once a maximum acceptable value has been defined, different checkouts configurations can be evaluated to determine the optimal one.
 
 \clearpage
 
