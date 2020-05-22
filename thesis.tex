@@ -22,6 +22,9 @@
 \usepackage{titlesec} % per formato custom dei titoli dei capitoli
 \usepackage{amsmath}
 \usepackage[boxed,vlined]{algorithm2e}
+\usepackage{pgf}
+\usepackage{import}
+\usepackage[skip=2pt]{caption}
 
 
 %%%%%%%%%%%%%%
@@ -89,6 +92,13 @@
 \titlespacing*{\chapter}{0pt}{0.59in}{0.02in}
 \titlespacing*{\section}{0pt}{0.20in}{0.02in}
 \titlespacing*{\subsection}{0pt}{0.10in}{0.02in}
+
+% Comando importazione immagini pgf
+\newcommand\inputpgf[2]{{
+      \let\pgfimageWithoutPath\pgfimage
+      \renewcommand{\pgfimage}[2][]{\pgfimageWithoutPath[##1]{#1/##2}}
+      \input{#1/#2}
+    }}
 
 % sommario
 \input{chapters/0_abstract}

@@ -39,7 +39,21 @@ The session dataset was binned in a 10-minutes interval. In this chapter only th
 \label{sec:rates_distributions}
 First, the measured inflow rates and dwell times were grouped by day and hour and plotted in heatmaps to get an overview of the different customer’s behavior during the week. Carts and baskets were considered separately.
 
-Then, the following distributions were analysed and fitted with known distributions to find out if the queueing theory techniques could be applied to this specific retail setting.
+\begin{figure}
+  \begin{center}
+    \inputpgf{img}{inflow_rate_heatmap.pgf}
+  \end{center}
+  \caption{Inflow rate heatmap}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \inputpgf{img}{dwell_time_distribution.pgf}
+  \end{center}
+  \caption{Dwell time distribution}
+\end{figure}
+
+Then, The following distributions were analysed and fitted with known distributions to find out if the queueing theory techniques could be applied to this specific retail setting.
 First, the distribution of the dwell time was investigated. The different assets types were considered separately since they present very different behaviours. An approximation of the distribution was given by the Erlang distribution (in red).
 
 For the inflow rate, the distribution of the inter-arrival times was calculated. The inter-arrival time is the time passed between the arrival in the shop of two consecutive customers. The distributions can be approximated with an exponential distribution (in red).
