@@ -156,7 +156,7 @@ In the previous section various approximations of the average queue length were 
 \label{subsec:optimal_checkouts_configuration}
 
 \begin{algorithm}[H]
-  $ c \gets c_t$\;
+  $ c \gets c_{now}$\;
   \If{\FuncSty{Ls($c$)} $ > Ls_{max}$}{
     \While{$ c \leq c_{max} $ \KwSty{and} \FuncSty{Ls($c$)} $ > Ls_{max} $}{
       $ c \gets c + 1 $\;
