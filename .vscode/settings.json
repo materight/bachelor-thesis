@@ -7,7 +7,8 @@
     "spellright.documentTypes": [
         "markdown",
         "latex",
-        "plaintext"
+        "plaintext",
+        "bibtex"
     ],
     "latex-workshop.latex.outDir": "%DIR%\\.tmp",
     "latex-workshop.latex.recipe.default": "first",
@@ -44,5 +45,10 @@
             ],
             "env": {}
         }
-    ]
+    ],
+    "spellright.parserByClass": {
+        "bibtex": {
+            "parser": "latex"
+        }
+    }
 }
