@@ -245,8 +245,9 @@ In the previous section various approximations for the average queue length were
 \subsection{Optimal checkouts configuration}
 \label{subsec:optimal_checkouts_configuration}
 
-The optimal number of open checkouts \( c \) for the next future period \( t+1 \) should be as low as possible, but still enough to maintain the queue length under a predetermined acceptable threshold \( Ls_{max} \). The problem can be alternatively expressed as “find the minimum value for \( c \) such that \( \text{Ls}(c) \leq Ls_{max} \) and \( 1 \leq c \leq c_{max} \)”, where \( \text{Ls}(c) \) is the expected queue length having \( c \) servers, calculated using one of the methods presented in the previous section, and \( c_{max} \) is the total number of available checkouts in the supermarket. Given the complexity of the model, different values for \( c \) are tried with the queue length forecast equations until the best value is found, starting with \( c = c_{now} \), where \( c_{now} \) is the current number of open counters. The pseudocode of the final algorithm is presented below:
-\begin{algorithm}[H]
+The optimal number of open checkouts \( c \) for the next future period \( t+1 \) should be as low as possible, but still enough to maintain the queue length under a predetermined acceptable threshold \( Ls_{max} \). The problem can be alternatively expressed as “find the minimum value for \( c \) such that \( \text{Ls}(c) \leq Ls_{max} \) and \( 1 \leq c \leq c_{max} \)”, where \( \text{Ls}(c) \) is the expected queue length having \( c \) servers, calculated using one of the methods presented in the previous section, and \( c_{max} \) is the total number of available checkouts in the supermarket. Given the complexity of the model, different values for \( c \) are tried with the queue length forecast equations until the best value is found, starting with \( c = c_{now} \), where \( c_{now} \) is the current number of open counters. Algorithm \ref{alg:checkouts_optimization} shows a possible implementation of this process.
+\begin{algorithm}
+  \SetAlgorithmName{Algorithm}{} \;
   $ c \gets c_{now}$\;
   \If{\FuncSty{Ls($c$)} $ > Ls_{max}$}{
     \While{$ c \leq c_{max} $ \KwSty{and} \FuncSty{Ls($c$)} $ > Ls_{max} $}{
@@ -259,6 +260,7 @@ The optimal number of open checkouts \( c \) for the next future period \( t+1 \
     }
     $ c \gets c + 1 $\;
   }
+  \caption{\label{alg:checkouts_optimization}Determine the optimal checkouts configuration.}
 \end{algorithm}
 
 Alternatively, a maximum waiting time \( Ws_{max} \) can be used as threshold, instead of \( Ls_{max} \). In that case the algorithm remains the same but with \( \text{Ls}(c) \) and \( Ls_{max} \) respectively replaced by \( \text{Ws}(c) \) and \( Ws_{max} \).

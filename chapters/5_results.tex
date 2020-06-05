@@ -33,6 +33,7 @@ Since the final implementation in the RetailerIN system will work in a real-time
 Table \ref{tab:inflow_rate_forecast_results} summarizes the results obtained by each model. The residuals analysis for the AR-NN model can be seen in Figure \ref{fig:inflow_rate_forecast_residuals}.
 
 \begin{center}
+  \captionof{table}{\label{tab:inflow_rate_forecast_results}Accuracy and performance results of the inflow rate predictive models.}
   \begin{tabular}{ l r r r r }
     \hline
     Model name     & MAE             & RMSE            & MAPE               & Forecast time (ms) \\
@@ -43,7 +44,6 @@ Table \ref{tab:inflow_rate_forecast_results} summarizes the results obtained by 
     SARIMA         & 3.1986          & 4.2620          & 19.8370\%          & 3.3107             \\
     \hline
   \end{tabular}
-  \captionof{table}{\label{tab:inflow_rate_forecast_results} Accuracy and performance results of the inflow rate predictive models.}
 \end{center}
 
 \begin{figure}
@@ -71,6 +71,7 @@ where \( Lq_t^{TOT} \) is the total number of customers in queue at time \( t \)
 Since this model is still part of the time series forecasting field, the same errors measures presented in the previous section were used. The accuracy for various multi-step forecasts is shown in the Table \ref{tab:arrival_rate_forecast_results}. The number of steps indicates the number of future intervals forecasted, e.g. a three-step forecasting gives prediction values for \( \lambda_{t+3} \), having the measured inflow rate data till interval \( t \).
 
 \begin{center}
+  \captionof{table}{\label{tab:arrival_rate_forecast_results}Accuracy results of the arrival rate predictive model.}
   \begin{tabular}{ l r r r }
     \hline
     Steps & MAE    & RMSE   & MAPE      \\
@@ -81,7 +82,6 @@ Since this model is still part of the time series forecasting field, the same er
     4     & 1.7508 & 2.4305 & 27.0171\% \\
     \hline
   \end{tabular}
-  \captionof{table}{\label{tab:arrival_rate_forecast_results} Accuracy results of the arrival rate predictive model.}
 \end{center}
 
 \subsection{Conclusions}
@@ -116,6 +116,7 @@ To evaluate the accuracy of each method, a measurement of each counter’s queue
 As stated in the previous chapter, the queues length data was available only for the \emph{supermarket B}. These values covered just one week of observations, from the 2th to the 8th of March, instead of two months as the sessions dataset. Again, since the training data can still be seen as a time series, the same accuracy measures from the previous chapter were used. The results are shown in Figure \ref{fig:queue_length_forecast} and in Table \ref{tab:queue_length_forecast_results}.
 
 \begin{center}
+  \captionof{table}{\label{tab:queue_length_forecast_results}Accuracy results of the queue length predictive model.}
   \begin{tabular}{ l r r r }
     \hline
     Approximation & MAE    & RMSE   & MAPE      \\
@@ -125,7 +126,6 @@ As stated in the previous chapter, the queues length data was available only for
     MAR           & 0.4919 & 0.9646 & 19.5708\% \\
     \hline
   \end{tabular}
-  \captionof{table}{\label{tab:queue_length_forecast_results} Accuracy results of the queue length predictive model.}
 \end{center}
 
 \begin{figure}
