@@ -21,7 +21,7 @@
 \usepackage[paperheight=29.7cm,paperwidth=21cm,outer=1.5cm,inner=2.5cm,top=2cm,bottom=2cm]{geometry} % per definizione layout
 \usepackage{titlesec} % per formato custom dei titoli dei capitoli
 \usepackage{amsmath}
-\usepackage[boxed,vlined]{algorithm2e}
+\usepackage[vlined]{algorithm2e}
 \usepackage{pgf}
 \usepackage{import}
 \usepackage[skip=2pt]{caption}
@@ -92,6 +92,9 @@
 \titlespacing*{\chapter}{0pt}{0.59in}{0.02in}
 \titlespacing*{\section}{0pt}{0.20in}{0.02in}
 \titlespacing*{\subsection}{0pt}{0.10in}{0.02in}
+
+% Aumento spaziature colonne tabelle
+\setlength{\tabcolsep}{12pt}
 
 % Comando importazione immagini pgf
 \newcommand\inputpgf[2]{{
