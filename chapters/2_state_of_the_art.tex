@@ -48,7 +48,9 @@ Taylor’s \emph{double seasonal exponential smoothing} method \cite{taylor} was
 \label{subsec:artificial_neural_networks}
 
 \emph{Artificial Neural Networks} (ANN) allow complex nonlinear relationships between the target variable and its predictors. With time series data, lagged values of the time series can be used as inputs, in what is called an \emph{Autoregressive Neural Network} (AR-NN). With seasonal data, it is also useful to also add the last observed values from the past seasons in input \cite{hyndman2018}. In general, to compute a forecast value \( \hat{y}_{t+1} \) for time \( t+1 \), the input can be expressed as:
-\[ (y_{t}, y_{t-1}, ..., y_{t-p}, y_{t-m}, y_{t-2m}, ..., y_{t-Pm}) \]
+\[
+  (y_{t}, y_{t-1}, ..., y_{t-p}, y_{t-m}, y_{t-2m}, ..., y_{t-Pm})
+\]
 
 The notation \( \text{AR-NN}(p, P, k)_m \) is used to indicate an autoregressive neural network, with:
 \begin{itemize}
