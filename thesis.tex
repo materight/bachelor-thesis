@@ -75,10 +75,7 @@
 
 % gruppo per definizone di successione capitoli senza interruzione di pagina
 \begingroup
-% nessuna interruzione di pagina tra capitoli
-% ridefinizione dei comandi di clear page
-% \renewcommand{\cleardoublepage}{}
-% \renewcommand{\clearpage}{}
+
 % redefinizione del formato del titolo del capitolo
 % da formato
 %   Capitolo X
@@ -105,6 +102,12 @@
 
 % sommario
 \input{chapters/0_abstract}
+
+% nessuna interruzione di pagina tra capitoli
+% ridefinizione dei comandi di clear page
+\renewcommand{\cleardoublepage}{}
+\renewcommand{\clearpage}{}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Nota
