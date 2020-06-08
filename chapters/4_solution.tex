@@ -6,7 +6,7 @@ This chapter describes the methods used to build the final predictive model. As 
 \section{Inflow rate forecast}
 \label{sec:inflow_rate_forecast}
 
-Since the inflow rate can be expressed as a time series, different time series forecasting models presented in Section \ref{sec:time_series_forecasting} were tested and the one with the higher forecasting accuracy was selected. A comparison of the results and performances for each model is presented in Section \ref{sec:inflow_rate_forecast_results}. This section discusses the implementation details for each of those models.
+Since the inflow rate can be expressed as a time series, different time series forecasting models presented in Section~\ref{sec:time_series_forecasting} were tested and the one with the higher forecasting accuracy was selected. A comparison of the results and performances for each model is presented in Section~\ref{sec:inflow_rate_forecast_results}. This section discusses the implementation details for each of those models.
 
 \subsection{Persistence model}
 \label{subsec:persistence_model}
@@ -19,7 +19,7 @@ The first presented model was used only to define a performance baseline. This g
 \subsection{Drift model}
 \label{subsec:drift_model}
 
-As seen in Chapter \ref{cha:data_analysis}, the inflow rate time series presents a strong seasonal component, so basing the forecast on this repeating pattern could results in good accuracy. The forecast values were calculated as the average of the values in the previous weeks from the same week day and time, as:
+As seen in Chapter~\ref{cha:data_analysis}, the inflow rate time series presents a strong seasonal component, so basing the forecast on this repeating pattern could results in good accuracy. The forecast values were calculated as the average of the values in the previous weeks from the same week day and time, as:
 \begin{equation}
   \hat{y}_t = \hat{f}(t) = \frac{1}{N} \sum_{i=1}^{N} y_{t-iW}
 \end{equation}
@@ -34,32 +34,32 @@ were \( M \) is the number of previous steps to be considered by the drift. We c
 \subsection{Artificial Neural Network model}
 \label{subsec:artificial_neural_network_model}
 
-As stated in Section \ref{subsec:artificial_neural_networks}, artificial neural networks are a popular and effective technique for time series forecasting. In the same section, \emph{autoregressive neural networks} were introduced with the notation \( \text{AR-NN}(p, P, k)_m \).
+As stated in Section~\ref{subsec:artificial_neural_networks}, artificial neural networks are a popular and effective technique for time series forecasting. In the same section, \emph{autoregressive neural networks} were introduced with the notation \( \text{AR-NN}(p, P, k)_m \).
 
-Since the inflow rate values present a strong correlation with the previous values, as seen in Section \ref{subsec:inflow_rate_autocorrelation}, the time series is non-stationary, and therefore the dataset must be rendered stationary before training the model. This was done by \emph{differencing} the time series, i.e. by calculating the difference between consecutive observations (also called \emph{first-order differencing}). Each value of the differenced time series can be written as \( y'_t = y_t - y_{t-1} \). This transformation can help stabilize the mean of the time series, reducing the effects of trend and seasonalities. Since the time series present a strong seasonal component, a seasonal differencing was also applied, written as \( y'_t = y_t - y_{t-m} \), where \( m \) is the number of lags in a seasonal cycle. A daily seasonal cycle was taken in account, so \( m = 144 \). Both differentiations were applied to obtain stationarity, thus each observation of the final time series used to train the model was calculated as:
+Since the inflow rate values present a strong correlation with the previous values, as seen in Section~\ref{subsec:inflow_rate_autocorrelation}, the time series is non-stationary, and therefore the dataset must be rendered stationary before training the model. This was done by \emph{differencing} the time series, i.e. by calculating the difference between consecutive observations (also called \emph{first-order differencing}). Each value of the differenced time series can be written as \( y'_t = y_t - y_{t-1} \). This transformation can help stabilize the mean of the time series, reducing the effects of trend and seasonalities. Since the time series present a strong seasonal component, a seasonal differencing was also applied, written as \( y'_t = y_t - y_{t-m} \), where \( m \) is the number of lags in a seasonal cycle. A daily seasonal cycle was taken in account, so \( m = 144 \). Both differentiations were applied to obtain stationarity, thus each observation of the final time series used to train the model was calculated as:
 \begin{equation}
   y''_t = y'_t - y'_{t-1} = (y_t - y_{t-m}) - (y_{t-1} - y_{t-m-1})
 \end{equation}
-The PACF analysis of the differenced time series in Figure \ref{fig:stationary_inflow_rate_acf} shows that this approach is effective in making the time series stationary.
+The PACF analysis of the differenced time series in Figure~\ref{fig:stationary_inflow_rate_acf} shows that this approach is effective in making the time series stationary.
 
 \begin{figure}
   \begin{center}
     \inputpgf{img}{stationary_inflow_rate_acf.pgf}
   \end{center}
-  \caption{The ACF of the stationarized inflow rate time series. In comparison to the non-stationary ACF (see Figure \ref{fig:inflow_rate_acf}), there is no visible seasonality.}
+  \caption{The ACF of the stationarized inflow rate time series. In comparison to the non-stationary ACF (see Figure~\ref{fig:inflow_rate_acf}), there is no visible seasonality.}
   \label{fig:stationary_inflow_rate_acf}
 \end{figure}
 
-As stated in Section \ref{subsec:artificial_neural_networks}, given a target value \( y_{t+1} \), each input sample can be written as:
+As stated in Section~\ref{subsec:artificial_neural_networks}, given a target value \( y_{t+1} \), each input sample can be written as:
 \[
   (y_{t}, y_{t-1}, ..., y_{t-p}, y_{t-m}, y_{t-2m}, ..., y_{t-Pm})
 \]
 
-The model used a MSE (Mean Squared Error) loss function and a \emph{sigmoid} activation function. The ANN trained over a batch size of \( 24 \cdot 6 = 144 \) samples, that is the number of observations in a day. The training was then repeated for a total of \( 100 \) epochs. Various parameters values for \( p \), \( P \) and \( k \) were tested and the model with the best performance was used. The obtained results and accuracy are discussed in Section \ref{sec:inflow_rate_forecast_results}.
+The model used a MSE (Mean Squared Error) loss function and a \emph{sigmoid} activation function. The ANN trained over a batch size of \( 24 \cdot 6 = 144 \) samples, that is the number of observations in a day. The training was then repeated for a total of \( 100 \) epochs. Various parameters values for \( p \), \( P \) and \( k \) were tested and the model with the best performance was used. The obtained results and accuracy are discussed in Section~\ref{sec:inflow_rate_forecast_results}.
 
 \subsection{SARIMA model}
 \label{subsec:sarima_model}
-In Section \ref{subsec:arima_models} the ARIMA model and some of its evolutions were introduced. Since the inflow rate presents a strong daily seasonal pattern, as seen in Section \ref{subsec:inflow_rate_autocorrelation}, the SARIMA model was chosen as a possible forecasting method. This model has different parameters that must be configured correctly in order to achieve a good prediction accuracy:
+In Section~\ref{subsec:arima_models} the ARIMA model and some of its evolutions were introduced. Since the inflow rate presents a strong daily seasonal pattern, as seen in Section~\ref{subsec:inflow_rate_autocorrelation}, the SARIMA model was chosen as a possible forecasting method. This model has different parameters that must be configured correctly in order to achieve a good prediction accuracy:
 \begin{itemize}
   \item \( p \): autoregressive order;
   \item \( d \): degree of differencing;
@@ -70,21 +70,21 @@ In Section \ref{subsec:arima_models} the ARIMA model and some of its evolutions 
   \item \( m \): number of time steps in the seasonal period.
 \end{itemize}
 
-The parameters configuration can be written as \( \text{SARIMA}(p,d,q)(P,D,Q)_m \). For some of these parameters, the optimal values can be determined by the analysis of the time series, while the only possible approach for the others is to try different values and select the ones that minimize the forecasting errors. By the results obtained in Chapter \ref{cha:data_analysis}, we can set:
+The parameters configuration can be written as \( \text{SARIMA}(p,d,q)(P,D,Q)_m \). For some of these parameters, the optimal values can be determined by the analysis of the time series, while the only possible approach for the others is to try different values and select the ones that minimize the forecasting errors. By the results obtained in Chapter~\ref{cha:data_analysis}, we can set:
 \begin{itemize}
   \item \( d = 1 \) and \( D = 1 \) for respectively first-order and seasonal differencing. By doing this we achieve the same type of differencing explained in the previous section;
-  \item \( q = 6 \) and \( Q = 3 \), obtained by the PACF analysis of the differenced time series. Specifically, the plot shows an exponential decay in the seasonal lags of the PACF (e.g at lags 1, 144, 288, ...). For this reason, the number of significant autocorrelation coefficients gives a good approximation for \( q \) and \( Q \) \cite{hyndman2018};
+  \item \( q = 6 \) and \( Q = 3 \), obtained by the PACF analysis of the differenced time series. Specifically, the plot shows an exponential decay in the seasonal lags of the PACF (e.g at lags 1, 144, 288, ...). For this reason, the number of significant autocorrelation coefficients gives a good approximation for \( q \) and \( Q \)~\cite{hyndman2018};
   \item \( m = 144 \) that is the daily seasonal cycle length, i.e. the number of 10-minute intervals in a day.
 \end{itemize}
 
-In 2007, Hyndman et al. \cite{hyndman2007} proposed the \emph{Hyndman-Khandakar algorithm}, which combines unit root tests, minimization of the \emph{Akaike’s Information Criterion} (AIC) and \emph{Maximum Likelihood Estimation} (MLE) to automatically determine the best parameters for the SARIMA model. While this method is very computational expensive and does not always returns the best configuration, it removes a lot of the steps and trials involved in the parameters determination, simplifying the whole process. By using this technique, the previous parameters values were confirmed to be the optimal ones. Moreover, the results showed that by using \( p = 0 \) and \( P = 0 \) the best accuracy was obtained.
+In 2007, Hyndman et al.~\cite{hyndman2007} proposed the \emph{Hyndman-Khandakar algorithm}, which combines unit root tests, minimization of the \emph{Akaike’s Information Criterion} (AIC) and \emph{Maximum Likelihood Estimation} (MLE) to automatically determine the best parameters for the SARIMA model. While this method is very computational expensive and does not always returns the best configuration, it removes a lot of the steps and trials involved in the parameters determination, simplifying the whole process. By using this technique, the previous parameters values were confirmed to be the optimal ones. Moreover, the results showed that by using \( p = 0 \) and \( P = 0 \) the best accuracy was obtained.
 
 \section{Arrival rate forecast}
 \label{sec:arrival_rate_forecast}
 
-Once a predictive model was defined, the measured and forecasted inflow rates were combined and used to get a prediction of the \emph{arrival rate} at the checkouts. Since the inflow rate into the shop appears with a delay at the checkout area, and this delay is the customer's dwell time, a time-dependent probability density function \( p_t(\tau) \) is required, where \( \tau \) is the expected dwell time of a customer \cite{aksu}.
+Once a predictive model was defined, the measured and forecasted inflow rates were combined and used to get a prediction of the \emph{arrival rate} at the checkouts. Since the inflow rate into the shop appears with a delay at the checkout area, and this delay is the customer's dwell time, a time-dependent probability density function \( p_t(\tau) \) is required, where \( \tau \) is the expected dwell time of a customer~\cite{aksu}.
 
-In Section \ref{sec:dwell_time_inflow_rate_service_time_distributions} the general distribution of the dwell time was presented and with the analysis of Section \ref{sec:time_series_analysis} it is clear that these values are strongly time-dependent, thus it can be seen as a stochastic process \( \{ X_t \} \) with \( X_t \sim \text{Erlang}(k_t, n_t) \), where \( k_t = \text{E}[X_t]^2 / \text{Var}[X_t] \) and \( n_t =  \text{E}[X_t] / \text{Var}[X_t] \). Given the weekly and daily seasonality of the time series, different \( X_t \) distributions were defined for each interval on every week day, for a total of \( 7 \cdot 24 \cdot 6 = 1008 \) distributions, since 10-minute intervals are used. Each aforementioned distribution was obtained by calculating the values for \( \text{E}[X_t] \) and \( \text{Var}[X_t] \) from the observations of the previous weeks on the same interval and week day.
+In Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions} the general distribution of the dwell time was presented and with the analysis of Section~\ref{sec:time_series_analysis} it is clear that these values are strongly time-dependent, thus it can be seen as a stochastic process \( \{ X_t \} \) with \( X_t \sim \text{Erlang}(k_t, n_t) \), where \( k_t = \text{E}[X_t]^2 / \text{Var}[X_t] \) and \( n_t =  \text{E}[X_t] / \text{Var}[X_t] \). Given the weekly and daily seasonality of the time series, different \( X_t \) distributions were defined for each interval on every week day, for a total of \( 7 \cdot 24 \cdot 6 = 1008 \) distributions, since 10-minute intervals are used. Each aforementioned distribution was obtained by calculating the values for \( \text{E}[X_t] \) and \( \text{Var}[X_t] \) from the observations of the previous weeks on the same interval and week day.
 
 Let \( \lambda(t) \) be the \emph{predicted arrival rate} for the time interval \( t \), \( \Delta t \) the intervals size, \( p_t(\tau_i) \) the probability of having a dwell time of \( \tau_i \), with \( (i-1) \Delta t < \tau_i \leq i \Delta t \), and \( y_{t-i} \) the \emph{measured inflow rate} at time \( t-i \). We can approximate \( \lambda(t) \) by:
 \begin{equation}
@@ -96,7 +96,7 @@ Since after a certain \( \tau_i \) value, \( p_t(\tau_i) \) becomes insignifican
   \lambda(t) = \sum_{i=1}^{K} y_{t-i} \cdot p_t(\tau_i)
   \label{eq:1}
 \end{equation}
-where $$ K $$ is such that \( \tau_K \leq \tau_{max} \leq \tau_{k+1} \). This equation is however applicable only if the measured values for \( y_{t-1}, y_{t-2}, ..., y_{y-K} \) are known, thus only when \( t \leq t_{now} \), where \( t_{now} \) is the current interval when these computations are completed. If \( t > t_{now} \), a forecast of the inflow rate, as described in Section \ref{sec:inflow_rate_forecast}, must be used to provide the missing information. For this reason, we define a function \( \text{in}(t) \) as:
+where $$ K $$ is such that \( \tau_K \leq \tau_{max} \leq \tau_{k+1} \). This equation is however applicable only if the measured values for \( y_{t-1}, y_{t-2}, ..., y_{y-K} \) are known, thus only when \( t \leq t_{now} \), where \( t_{now} \) is the current interval when these computations are completed. If \( t > t_{now} \), a forecast of the inflow rate, as described in Section~\ref{sec:inflow_rate_forecast}, must be used to provide the missing information. For this reason, we define a function \( \text{in}(t) \) as:
 \begin{equation}
   \text{in}(t) = \\
   \begin{cases}
@@ -131,12 +131,12 @@ To obtain a \emph{multi-step forecast} of the next \( N \) intervals, we can dir
   \end{bmatrix}
 \end{equation}
 
-Section \ref{sec:arrival_rate_forecast_results} describes the results obtained and the accuracy of this predictive model.
+Section~\ref{sec:arrival_rate_forecast_results} describes the results obtained and the accuracy of this predictive model.
 
 \section{Queue length forecast}
 \label{sec:queue_length_forecast}
 
-This section describes the model implemented for forecasting the queue length at the checkouts. As described in Section \ref{sec:queueing_theory}, the required variables are:
+This section describes the model implemented for forecasting the queue length at the checkouts. As described in Section~\ref{sec:queueing_theory}, the required variables are:
 \begin{itemize}
   \item \( \lambda(t) \): arrival rate at the checkouts;
   \item \( \mu(t) \): service rate of a single checkout;
@@ -148,18 +148,18 @@ A forecast of the arrival rate \( \lambda(t) \) has been proposed in the previou
 \subsection{Service rate approximation}
 \label{subsec:service_rate_approximation}
 
-In Section \ref{subsec:service_time_approximations}, various possible approximations for the service time were introduced. In Section \ref{subsec:service_rate_and_open_terminals_count_approximation}, it was shown that a constant, and therefore time-independent, service rate could be used without losing precision. This constant service rate was obtained by investigating the time spent in idle by each terminal, which was determined by the analysis of the inter-exit times.
+In Section~\ref{subsec:service_time_approximations}, various possible approximations for the service time were introduced. In Section~\ref{subsec:service_rate_and_open_terminals_count_approximation}, it was shown that a constant, and therefore time-independent, service rate could be used without losing precision. This constant service rate was obtained by investigating the time spent in idle by each terminal, which was determined by the analysis of the inter-exit times.
 
-As described in Section \ref{subsec:service_time_approximations}, when the time spent in idle by the counters’ staff becomes insignificant, i.e. when it approaches a value of zero, the customers’ inter-exit times can give a good approximation of the actual time spent serving each customer in the queue. However, since the idle time is not an available measurement, it is not possible to determine directly when its value is near zero. Instead, this was achieved by using the hours with peaks in the inflow traffic at the checkouts as an indicator of low idle times. To do this, a threshold value \( \lambda_{max} \) was defined, such that when it is exceeded by the actual arrival rate, i.e. when \( \lambda_t \ge \lambda_{max} \), the time \( t \) can be considered as an high traffic density period and therefore included in the aforementioned approximation. An average of the measured inter-exit times during these high traffic periods was then calculated and used as the total \emph{service time} \( S \) of a single counter. The \emph{service rate} \( \mu \) was then obtained as:
+As described in Section~\ref{subsec:service_time_approximations}, when the time spent in idle by the counters’ staff becomes insignificant, i.e. when it approaches a value of zero, the customers’ inter-exit times can give a good approximation of the actual time spent serving each customer in the queue. However, since the idle time is not an available measurement, it is not possible to determine directly when its value is near zero. Instead, this was achieved by using the hours with peaks in the inflow traffic at the checkouts as an indicator of low idle times. To do this, a threshold value \( \lambda_{max} \) was defined, such that when it is exceeded by the actual arrival rate, i.e. when \( \lambda_t \ge \lambda_{max} \), the time \( t \) can be considered as an high traffic density period and therefore included in the aforementioned approximation. An average of the measured inter-exit times during these high traffic periods was then calculated and used as the total \emph{service time} \( S \) of a single counter. The \emph{service rate} \( \mu \) was then obtained as:
 \begin{equation}
   \mu = \frac{\Delta t}{S}
 \end{equation}
-where \( \Delta t = 10\text{min} \). In Section \ref{sec:queue_length_forecast_results} the results of this approximation are presented.
+where \( \Delta t = 10\text{min} \). In Section~\ref{sec:queue_length_forecast_results} the results of this approximation are presented.
 
 \subsection{Queue length approximation}
 \label{subsec:queue_length_approximation}
 
-As described in Section \ref{sec:queueing_theory}, the standard queueing theory does not support time-varying arrival rates with temporal overloading. The only approach that seemed to fit the context of this research was the \emph{Stationary Backlog-Carryover} (SBC) approach proposed by Stolletz in 2008 \cite{stolletz}. SBC is based on a \( M/M/c/c \) model, in which a maximum number of \( c \) customers can be in the queue at any time, and any further arrival to the queue is considered \emph{blocked} (i.e. lost), and uses an artificial arrival rate \( \widetilde{\lambda}_t \) to take in account the temporal overloading of the queue, allowing standard queueing models to be used. \( \widetilde{\lambda}_t \) consists of both the average arrival rate \( \lambda_t \) and the \emph{backlog rate} of the previous period \( b_{t-1} \), that is the rate of customers leaving the system due to blocking in the former period.
+As described in Section~\ref{sec:queueing_theory}, the standard queueing theory does not support time-varying arrival rates with temporal overloading. The only approach that seemed to fit the context of this research was the \emph{Stationary Backlog-Carryover} (SBC) approach proposed by Stolletz in 2008~\cite{stolletz}. SBC is based on a \( M/M/c/c \) model, in which a maximum number of \( c \) customers can be in the queue at any time, and any further arrival to the queue is considered \emph{blocked} (i.e. lost), and uses an artificial arrival rate \( \widetilde{\lambda}_t \) to take in account the temporal overloading of the queue, allowing standard queueing models to be used. \( \widetilde{\lambda}_t \) consists of both the average arrival rate \( \lambda_t \) and the \emph{backlog rate} of the previous period \( b_{t-1} \), that is the rate of customers leaving the system due to blocking in the former period.
 
 Let \( P_t(B) \) be the steady-state probability of blocking for the \( M/M/c/c \) model in period \( t \) with artificial arrival rate \( \widetilde{\lambda}_t \). The backlog rate \( b_t \) is given by:
 \begin{equation}
@@ -184,7 +184,7 @@ The expected servers utilization \( \rho_t \) can be then calculated as:
   \label{eq:2}
 \end{equation}
 
-Stolletz proposed two different approximations for the expected number of customers in the queue, the first based on a \emph{Modified Arrival Rate} (MAR) and the second based on \( \rho_t \) and \( b_t \) \cite{stolletz}.
+Stolletz proposed two different approximations for the expected number of customers in the queue, the first based on a \emph{Modified Arrival Rate} (MAR) and the second based on \( \rho_t \) and \( b_t \)~\cite{stolletz}.
 
 The MAR approach uses an \( M/M/c/\infty \) queueing model with the same utilization factor \( \rho_t \) of the \( M/M/c/c \) model analyzed in the previous step. To do so, a modified arrival rate \( \lambda_t^{MAR} \) is chosen such that the model reach the approximated \( \rho_t \) obtained by (\ref{eq:2}), in particular:
 \begin{equation}
@@ -227,7 +227,7 @@ and
   Ls_t^{A2} = Lq_t^{A2} + c_t \rho_t
 \end{equation}
 
-Once the number of customers in queue has been determined, Little’s Law (\ref{eq:little_law})\cite{little} can be used to calculate the expected queue and system waiting times, respectively \( Wq_t \) and \( Ws_t \), as:
+Once the number of customers in queue has been determined, Little’s Law (\ref{eq:little_law})~\cite{little} can be used to calculate the expected queue and system waiting times, respectively \( Wq_t \) and \( Ws_t \), as:
 \begin{equation}
   Wq_t = Lq_t / \lambda^{MAR}_t
 \end{equation}
@@ -235,7 +235,7 @@ Once the number of customers in queue has been determined, Little’s Law (\ref{
   Ws_t = Ls_t / \lambda^{MAR}_t
 \end{equation}
 
-The results and performances of each approximation are discussed in Section \ref{sec:queue_length_forecast_results}.
+The results and performances of each approximation are discussed in Section~\ref{sec:queue_length_forecast_results}.
 
 \section{Checkouts optimization}
 \label{sec:checkouts_optimization}
@@ -245,7 +245,7 @@ In the previous section, various approximations for the average queue length wer
 \subsection{Optimal checkouts configuration}
 \label{subsec:optimal_checkouts_configuration}
 
-The optimal number of open checkouts \( c \) for the next future period \( t+1 \) should be as low as possible, but still enough to maintain the queue length under a predetermined acceptable threshold \( Ls_{max} \). The problem can be alternatively expressed as “find the minimum value for \( c \) such that \( Ls(c) \leq Ls_{max} \) and \( 1 \leq c \leq c_{max} \)”, where \( Ls(c) \) is the expected queue length having \( c \) servers, calculated using one of the methods presented in the previous section, and \( c_{max} \) is the total number of available checkouts in the supermarket. Given the complexity of the model, different values for \( c \) are tried with the queue length forecast equations until the best value is found, starting with \( c = c_{now} \), where \( c_{now} \) is the current number of open counters. Algorithm \ref{alg:checkouts_optimization} shows a possible implementation of this process.
+The optimal number of open checkouts \( c \) for the next future period \( t+1 \) should be as low as possible, but still enough to maintain the queue length under a predetermined acceptable threshold \( Ls_{max} \). The problem can be alternatively expressed as “find the minimum value for \( c \) such that \( Ls(c) \leq Ls_{max} \) and \( 1 \leq c \leq c_{max} \)”, where \( Ls(c) \) is the expected queue length having \( c \) servers, calculated using one of the methods presented in the previous section, and \( c_{max} \) is the total number of available checkouts in the supermarket. Given the complexity of the model, different values for \( c \) are tried with the queue length forecast equations until the best value is found, starting with \( c = c_{now} \), where \( c_{now} \) is the current number of open counters. Algorithm~\ref{alg:checkouts_optimization} shows a possible implementation of this process.
 \begin{algorithm}
   \SetAlgorithmName{Algorithm}{} \;
   $ c \gets c_{now}$\;
