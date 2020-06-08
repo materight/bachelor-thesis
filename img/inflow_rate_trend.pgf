@@ -236,7 +236,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=3.163185in,y=0.215130in,,top]{\color{textcolor}\rmfamily\fontsize{8.000000}{9.600000}\selectfont Time}%
+\pgftext[x=3.163185in,y=0.215130in,,top]{\color{textcolor}\rmfamily\fontsize{8.000000}{9.600000}\selectfont Time of the year}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -392,7 +392,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=0.222900in,y=2.035940in,,bottom,rotate=90.000000]{\color{textcolor}\rmfamily\fontsize{8.000000}{9.600000}\selectfont Customer}%
+\pgftext[x=0.222900in,y=2.035940in,,bottom,rotate=90.000000]{\color{textcolor}\rmfamily\fontsize{8.000000}{9.600000}\selectfont Customers}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfpathrectangle{\pgfqpoint{0.446370in}{0.691880in}}{\pgfqpoint{5.433630in}{2.688120in}}%
