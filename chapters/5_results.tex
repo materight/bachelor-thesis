@@ -108,8 +108,7 @@ Besides the arrival rate, these models also requires an approximation of the ser
 
 To evaluate the accuracy of each method, a measurement of each counter’s queue length was needed. The RetailerIN system is capable of inferring these information from the customers’ movement in the store. However, this inference is susceptible to accuracy issues, due to the nature of the problem, that must be taken in account when evaluating the forecasting performance. These issues includes:
 \begin{itemize}
-  \item Tracking of baskets: when a customer is using a basket and his turn of being served has arrived, the basket is left at the beginning of the rolling belt terminal.
-  \item It is therefore impossible to determine when the customer has been served and has left the queue.
+  \item Tracking of baskets: when a customer is using a basket and his turn of being served has arrived, the basket is left at the beginning of the rolling belt terminal. It is therefore impossible to determine when the customer has been served and has left the queue.
   \item Customers leaving the queue: it is possible that a customer leaves the queue to get additional products that he forgot or to join a different shorter queue. This kind of behavior is difficult to correctly track and can lead to inaccurate measurements.
   \item Sensors accuracy: if the counters or the waiting queues are too close from each other, the system may have some difficulties distinguishing every distinct queue.
 \end{itemize}
@@ -140,6 +139,6 @@ As stated in the previous, the queues length data was available only for the \em
 \subsection{Conclusions}
 \label{subsec:queue_length_forecast_results_conclusions}
 
-As explained before, the accuracy of the model is greatly affected by the accuracy of the queue length measurements. Moreover, the samples used for the evaluation were limited to only one week of data and the prediction accuracy may vary considerably depending on the considered period. There is also the store’s size factor that has a significant impact on the accuracy: with a higher traffic level, the effects of random and unpredictable queueing behavior, as well as the errors in the measurements described before, are diminished. The store used for the evaluation is small-sized, therefore the traffic levels are quite low and the accuracy is thus affected.
+As explained before, the accuracy of the model is greatly affected by the accuracy of the queue length measurements. Moreover, the samples used for the evaluation were limited to only one week of data and the prediction accuracy may vary considerably depending on the considered period. There is also the store’s size factor that has a significant impact on the results: with a higher traffic level, the effects of random and unpredictable queueing behavior, as well as the errors in the measurements described before, are diminished. The store used for the evaluation is small-sized, therefore the traffic levels are quite low and the accuracy is thus affected.
 
 \clearpage
