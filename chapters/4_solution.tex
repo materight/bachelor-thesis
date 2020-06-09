@@ -25,7 +25,7 @@ As seen in Chapter~\ref{cha:data_analysis}, the inflow rate time series presents
 \end{equation}
 where \( W \) is the number of intervals in a week and \( N \) is the number of previous weeks considered. Since we used 10-minute intervals, \( W = 1008 \). This method is accurate only if the cyclic patterns maintain the same levels every day, without any random variation.
 
-To take in account this variations in the inflow rate that can be caused by external factors, e.g. holidays and promotions, a \emph{local drift} was calculated using the errors of the forecasted values for the immediate past:
+To take in account this variations in the inflow rate that can be caused by external factors, e.g. holidays and special promotions, a \emph{local drift} was calculated using the errors of the forecasted values for the immediate past:
 \begin{equation}
   \hat{y}_t = \hat{f}(t) + \frac{1}{M} \sum_{i=1}^{M} y_{t-i} - \hat{f}(t-i)
 \end{equation}
