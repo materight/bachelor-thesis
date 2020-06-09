@@ -38,7 +38,7 @@ Once the main components of the time series have been determined, a predictive m
 \subsection{Exponential smoothing}
 \label{subsec:exponential_smoothing}
 
-In the \emph{Simple Exponential Smoothing} (SES) technique, the forecasted values are based on a weighted average of the previous values, where the most recent observations are given more importance using larger weights~\cite{hyndman2018}.
+In the \emph{Simple Exponential Smoothing} (SES) technique, the forecasted values are based on a weighted average of the previous values, where the most recent observations are given more importance using larger weights~\cite{brown}.
 
 A more complex implementation of the same principle is the \emph{Holt-Winters exponential smoothing} approach, which is able to decompose the time series into a level, trend and seasonal component, giving a more precise forecast~\cite{holt,winters}. However, this method is unable to model more complex series with multiple seasonality patterns, as in a supermarket inflow rate which presents daily and weekly seasonalities.
 
@@ -47,7 +47,7 @@ Taylor’s \emph{double seasonal exponential smoothing} method~\cite{taylor} was
 \subsection{Artificial Neural Networks}
 \label{subsec:artificial_neural_networks}
 
-\emph{Artificial Neural Networks} (ANN) allow complex nonlinear relationships between the target variable and its predictors. With time series data, lagged values of the time series can be used as inputs, in what is called an \emph{Autoregressive Neural Network} (AR-NN). With seasonal data, it is also useful to also add the last observed values from the past seasons in input~\cite{hyndman2018}. In general, to compute a forecast value \( \hat{y}_{t+1} \) for time \( t+1 \), the input can be expressed as:
+\emph{Artificial Neural Networks} (ANN) allow complex nonlinear relationships between the target variable and its predictors. With time series data, lagged values of the time series can be used as inputs, in what is called an \emph{Autoregressive Neural Network} (AR-NN)~\cite{tang}. With seasonal data, it is also useful to add the last observed values from the past seasons in input~\cite{hyndman2018}. In general, to compute a forecast value \( \hat{y}_{t+1} \) for time \( t+1 \), the input can be expressed as:
 \[
   (y_{t}, y_{t-1}, ..., y_{t-p}, y_{t-m}, y_{t-2m}, ..., y_{t-Pm})
 \]
@@ -67,7 +67,7 @@ This method can be then applied recursively to obtain a three-step, four-step, e
 
 \subsection{ARIMA models}
 \label{subsec:arima_models}
-The \emph{AutoRegressive Integrated Moving Average} (ARIMA) models provide another technique for time series forecasting. Exponential smoothing and ARIMA models are the two most widely-used time series forecasting methods, and provide complementary approaches to the problem. While exponential smoothing models are based on a description of the trend and seasonality in the data, ARIMA models aim to describe the autocorrelations in the data~\cite{hyndman2018}.
+The \emph{AutoRegressive Integrated Moving Average} (ARIMA) models provide another technique for time series forecasting. Exponential smoothing and ARIMA models are the two most widely-used time series forecasting methods, and provide complementary approaches to the problem. While exponential smoothing models are based on a description of the trend and seasonality in the data, ARIMA models aim to describe the autocorrelations in the data~\cite{jenkins}.
 
 \emph{AutoRegressive} means the model uses the relationship between an observation and some number of lagged previous observations to generate a linear regression model.
 
@@ -82,7 +82,7 @@ The parameters of the ARIMA model are defined as follows:
   \item \( q \): moving average order, the size of the moving average window.
 \end{itemize}
 
-A simple version of the ARIMA model can only be used to forecast non-seasonal time series. However, it can be extended to model seasonal patterns with the Seasonal ARIMA (SARIMA). There are four seasonal parameters not part of ARIMA that must be configured:
+A simple version of the ARIMA model can only be used to forecast non-seasonal time series. However, it can be extended to model seasonal patterns with the Seasonal ARIMA (SARIMA)~\cite{hyndman2018}. There are four additional seasonal parameters not part of ARIMA that must be configured:
 \begin{itemize}
   \item \( P \): seasonal autoregressive order.
   \item \( D \): seasonal degree of differencing.
