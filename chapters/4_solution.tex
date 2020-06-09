@@ -6,7 +6,7 @@ This chapter describes the methods used to build the final predictive model. As 
 \section{Inflow rate forecast}
 \label{sec:inflow_rate_forecast}
 
-Since the inflow rate can be expressed as a time series, different time series forecasting models presented in Section~\ref{sec:time_series_forecasting} were tested and the one with the higher forecasting accuracy was selected. A comparison of the results and performances for each model is presented in Section~\ref{sec:inflow_rate_forecast_results}. This section discusses the implementation details for each of those models.
+Since the inflow rate can be expressed as a time series, different time series predictive models, presented in Section~\ref{sec:time_series_forecasting}, were tested. This section discusses the implementation details of these models, while a comparison of the obtained results and performances is presented in Section~\ref{sec:inflow_rate_forecast_results}
 
 \subsection{Persistence model}
 \label{subsec:persistence_model}
@@ -94,9 +94,9 @@ Let \( \lambda(t) \) be the \emph{predicted arrival rate} for the time interval 
 Since after a certain \( \tau_i \) value, \( p_t(\tau_i) \) becomes insignificant, we can limit the number of values to be considered by defining a maximum dwell time \( \tau_{max} \), that can be set either by a customizable parameter or by analyzing the dwell times distribution (e.g. by using the \emph{95th percentile}). In any case, \( \tau_{max} \) should be such that \( p_t(\tau_{max} + \Delta t) \) tends to zero. We can then rewrite the previous formula as:
 \begin{equation}
   \lambda(t) = \sum_{i=1}^{K} y_{t-i} \cdot p_t(\tau_i)
-  \label{eq:1}
+  \label{eq:arrival_rate1}
 \end{equation}
-where $$ K $$ is such that \( \tau_K \leq \tau_{max} \leq \tau_{k+1} \). This equation is however applicable only if the measured values for \( y_{t-1}, y_{t-2}, ..., y_{y-K} \) are known, thus only when \( t \leq t_{now} \), where \( t_{now} \) is the current interval when these computations are completed. If \( t > t_{now} \), a forecast of the inflow rate, as described in Section~\ref{sec:inflow_rate_forecast}, must be used to provide the missing information. For this reason, we define a function \( \text{in}(t) \) as:
+where \( K \) is such that \( \tau_K \leq \tau_{max} \leq \tau_{k+1} \). This equation is however applicable only if the measured values for \( y_{t-1}, y_{t-2}, ..., y_{y-K} \) are known, thus only when \( t \leq t_{now} \), where \( t_{now} \) is the current interval when these computations are completed. If \( t > t_{now} \), a forecast of the inflow rate, as described in Section~\ref{sec:inflow_rate_forecast}, must be used to provide the missing information. For this reason, we define a function \( \text{in}(t) \) as:
 \begin{equation}
   \text{in}(t) = \\
   \begin{cases}
@@ -104,7 +104,7 @@ where $$ K $$ is such that \( \tau_K \leq \tau_{max} \leq \tau_{k+1} \). This eq
     \hat{y}_{t} & \quad \text{otherwise}
   \end{cases}
 \end{equation}
-where \( y_t \) and \( \hat{y}_t \) are respectively the measured and predicted inflow rate at time \( t \). It shall be noted that the real measurements for an interval are available only once the said interval is ended, hence the reason for using \( y_t \) only when \( t < t_{now} \). The equation (\ref{eq:1}) is therefore rewritten as:
+where \( y_t \) and \( \hat{y}_t \) are respectively the measured and predicted inflow rate at time \( t \). It shall be noted that the real measurements for an interval are available only once the said interval is ended, hence the reason for using \( y_t \) only when \( t < t_{now} \). The equation~(\ref{eq:arrival_rate1}) is therefore rewritten as:
 \begin{equation}
   \lambda(t) = \sum_{i=1}^{K} \text{in}(t-i) \cdot p_t(\tau_i)
 \end{equation}
@@ -150,11 +150,7 @@ A forecast of the arrival rate \( \lambda(t) \) has been proposed in the previou
 
 In Section~\ref{subsec:service_time_approximations}, various possible approximations for the service time were introduced. In Section~\ref{subsec:service_rate_and_open_terminals_count_approximation}, it was shown that a constant, and therefore time-independent, service rate could be used without losing precision. This constant service rate was obtained by investigating the time spent in idle by each terminal, which was determined by the analysis of the inter-exit times.
 
-As described in Section~\ref{subsec:service_time_approximations}, when the time spent in idle by the counters’ staff becomes insignificant, i.e. when it approaches a value of zero, the customers’ inter-exit times can give a good approximation of the actual time spent serving each customer in the queue. However, since the idle time is not an available measurement, it is not possible to determine directly when its value is near zero. Instead, this was achieved by using the hours with peaks in the inflow traffic at the checkouts as an indicator of low idle times. To do this, a threshold value \( \lambda_{max} \) was defined, such that when it is exceeded by the actual arrival rate, i.e. when \( \lambda_t \ge \lambda_{max} \), the time \( t \) can be considered as an high traffic density period and therefore included in the aforementioned approximation. An average of the measured inter-exit times during these high traffic periods was then calculated and used as the total \emph{service time} \( S \) of a single counter. The \emph{service rate} \( \mu \) was then obtained as:
-\begin{equation}
-  \mu = \frac{\Delta t}{S}
-\end{equation}
-where \( \Delta t = 10\text{min} \). In Section~\ref{sec:queue_length_forecast_results} the results of this approximation are presented.
+As described in Section~\ref{subsec:service_time_approximations}, when the time spent in idle by the counters’ staff becomes insignificant, i.e. when it approaches a value of zero, the customers’ inter-exit times can give a good approximation of the actual time spent serving each customer in the queue. Since the idle time is not an available measurement, this was achieved by using the hours with peaks in the arrival rate at the checkouts as an indicator of low idle times. A threshold value \( \lambda_{max} \) was defined, such that when it is exceeded by the actual arrival rate, i.e. when \( \lambda_t \ge \lambda_{max} \), the time \( t \) can be considered as a period with high traffic density, and therefore included in the aforementioned approximation. An average of the measured inter-exit times during these high traffic periods was then calculated and used as \emph{service time} \( S \) of a single counter. The \emph{service rate} \( \mu \) was then obtained from \( S \) using Eq.~(\ref{eq:service_rate}). In Section~\ref{sec:queue_length_forecast_results} the results of this approximation are presented.
 
 \subsection{Queue length approximation}
 \label{subsec:queue_length_approximation}
@@ -181,17 +177,17 @@ By doing this, the customers not served in period \( t-1 \) are evenly spread ov
 The expected servers utilization \( \rho_t \) can be then calculated as:
 \begin{equation}
   \rho_t = \frac{\widetilde{\lambda}_t(1 - P_t(B))}{c_t\mu_t} = \frac{\widetilde{\lambda}_t - b_t}{c_t\mu_t} = \frac{\lambda_t + b_{t-1} - b_t}{c_t\mu_t}
-  \label{eq:2}
+  \label{eq:servers_utilization}
 \end{equation}
 
 Stolletz proposed two different approximations for the expected number of customers in the queue, the first based on a \emph{Modified Arrival Rate} (MAR) and the second based on \( \rho_t \) and \( b_t \)~\cite{stolletz}.
 
-The MAR approach uses an \( M/M/c/\infty \) queueing model with the same utilization factor \( \rho_t \) of the \( M/M/c/c \) model analyzed in the previous step. To do so, a modified arrival rate \( \lambda_t^{MAR} \) is chosen such that the model reach the approximated \( \rho_t \) obtained by (\ref{eq:2}), in particular:
+The MAR approach uses an \( M/M/c/\infty \) queueing model with the same utilization factor \( \rho_t \) of the \( M/M/c/c \) model analyzed in the previous step. To do so, a modified arrival rate \( \lambda_t^{MAR} \) is chosen such that the model reach the approximated \( \rho_t \) obtained by Eq.~(\ref{eq:servers_utilization}), in particular:
 \begin{equation}
   \lambda_t^{MAR} = \rho_t c_t \mu_t
 \end{equation}
 
-Applying (\ref{eq:2}) results in:
+Applying Eq.~(\ref{eq:servers_utilization}) results in:
 \begin{equation}
   \lambda_t^{MAR} = \lambda_t + b_{t-1} - b_t
 \end{equation}
@@ -227,7 +223,7 @@ and
   Ls_t^{A2} = Lq_t^{A2} + c_t \rho_t
 \end{equation}
 
-Once the number of customers in queue has been determined, Little’s Law (\ref{eq:little_law})~\cite{little} can be used to calculate the expected queue and system waiting times, respectively \( Wq_t \) and \( Ws_t \), as:
+Once the number of customers in queue has been determined, Little’s Law~(\ref{eq:little_law})~\cite{little} can be used to calculate the expected queue and system waiting times, respectively \( Wq_t \) and \( Ws_t \), as:
 \begin{equation}
   Wq_t = Lq_t / \lambda^{MAR}_t
 \end{equation}

@@ -168,7 +168,7 @@ The same analysis was then conducted for the dwell time (see Figure~\ref{fig:dwe
 \subsection{Service time approximations}
 \label{subsec:service_time_approximations}
 
-As described in Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions}, an approximation of the checkouts' service time \( S \) can be obtained using the basket size \( n \) with the Eq. (\ref{eq:service_time}): \( S = n S_{item} + S_{extra} \). However, this approximation is feasible only if the number of products bought in each session is available. Unfortunately, that is not the case for every store, so other approximations were investigated.
+As described in Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions}, an approximation of the checkouts' service time \( S \) can be obtained using the basket size \( n \) with Eq.~(\ref{eq:service_time}): \( S = n S_{item} + S_{extra} \). However, this approximation is feasible only if the number of products bought in each session is available. Unfortunately, that is not the case for every store, so other approximations were investigated.
 
 An alternative approach is to use the average number of customers served by each terminal. Since the service rate should represent the maximum service capacity of each terminal, the periods where the counters spent some time in \emph{idle}, i.e. without serving any customer, had to be excluded from this approximation. Therefore, only the intervals with a measured queue length greater than a predetermined threshold were considered. This threshold was determined by analyzing the measured \emph{outflow rate} and comparing it to the \emph{total service rate} (with \(\text{total service rate} = \text{service rate} \cdot \text{number open terminals} \)). When the two measurements have similar values, the maximum service capacity has been reached and the checkouts have probably spent no time in idle, thus the number of customer served in that interval should give an accurate approximation of the actual service rate. However, again, this approach is implementable only if the dataset contains the queues’ status.
 
@@ -188,6 +188,7 @@ The hours with peak outflow traffic, i.e. with minimum inter-exit rates, were ta
 Once an approximation of the service time \( S \) has been determined, the \emph{service rate} \( \mu \), that is the number of customers served in a time interval \( \Delta t \), can be obtained as:
 \begin{equation}
   \mu = \frac{\Delta t}{S}
+  \label{eq:service_rate}
 \end{equation}
 
 Intuitively, the total service rate should be directly influenced by the number of open terminals, considering that with more terminals the total service capacity increases. For this reason, the relation between these two measurements were investigated. Since a direct measurement of the total service rate was not available and it is equal to the total number of customers that leave the checkout area and then, after a small delay, exit the store, the \emph{outflow rate} was used as approximation. The correlation between the two measures resulted in a value of approximately \( 0.92 \), meaning that there is a strong linear relationship between them. To further verify this relation, the mean of the service rates per terminal \( \bar{\mu} \) was used to obtain the outflow rate \( o(t) \), as:
