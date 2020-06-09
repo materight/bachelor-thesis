@@ -115,7 +115,7 @@ To evaluate the accuracy of each method, a measurement of each counter’s queue
   \item Sensors accuracy: if the counters or the waiting queues are too close from each other, the system may have some difficulties distinguishing every distinct queue.
 \end{itemize}
 
-As stated in the previous, the queues length data was available only for the \emph{supermarket B}. These values covered just one week of observations, from the 2th to the 8th of March, instead of two months as the sessions dataset. Again, since the training data can still be seen as a time series, the same accuracy measures from the previous section were used. The results are shown in Figure~\ref{fig:queue_length_forecast} and in Table~\ref{tab:queue_length_forecast_results}.
+As stated in the previous section, the queues length data was available only for the \emph{supermarket B}, but it covered just one week of observations, from the 2th to the 8th of March, instead of two months as the sessions dataset. Again, since the training data can be seen as a time series, the same accuracy measures from the previous section were used. The results are shown in Figure~\ref{fig:queue_length_forecast} and in Table~\ref{tab:queue_length_forecast_results}.
 
 \begin{center}
   \captionof{table}{\label{tab:queue_length_forecast_results}Accuracy results of the queue length predictive model.}
@@ -143,4 +143,5 @@ As stated in the previous, the queues length data was available only for the \em
 
 As explained before, the accuracy of the model is greatly affected by the accuracy of the queue length measurements. Moreover, the samples used for the evaluation were limited to only one week of data and the prediction accuracy may vary considerably depending on the considered period. There is also the store’s size factor that has a significant impact on the results: with a higher traffic level, the effects of random and unpredictable queueing behavior, as well as the errors in the measurements described before, are diminished. The store used for the evaluation is small-sized, therefore the traffic levels are quite low and the accuracy is thus affected.
 
+\medskip
 \clearpage

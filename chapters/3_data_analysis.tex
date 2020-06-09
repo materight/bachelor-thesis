@@ -71,14 +71,14 @@ First, the distribution of the dwell time shown in Figure~\ref{fig:dwell_time_di
   \label{fig:dwell_time_distribution}
 \end{figure}
 
-For the inflow rate, the distribution of the \emph{inter-entry time} was calculated, shown in Figure~\ref{fig:inter_arrival_time_distribution}. The inter-entry time is the time passed between the entry of two consecutive customers. In this case, the distribution can be approximated by an \emph{exponential distribution}.
+For the inflow rate, the distribution of the \emph{inter-entry time} was calculated, shown in Figure~\ref{fig:inter_entry_time_distribution}. The inter-entry time is the time passed between the entry of two consecutive customers. In this case, the distribution can be approximated by an \emph{exponential distribution}.
 
 \begin{figure}
   \begin{center}
-    \inputpgf{img}{inter_arrival_time_distribution.pgf}
+    \inputpgf{img}{inter_entry_time_distribution.pgf}
   \end{center}
   \caption{The probability density function of the inter-entry times with the corresponding exponential distribution fit (in red).}
-  \label{fig:inter_arrival_time_distribution}
+  \label{fig:inter_entry_time_distribution}
 \end{figure}
 
 Next, the distribution of the checkouts’ service time was investigated. Since there are no available measurements of the actual service time, the \emph{basket size} \( n \), i.e. the total number of products bought in each session, was used as an approximation. Given the service time \( S \), we can define it as combination of:
@@ -90,6 +90,7 @@ and we can write:
 
 \begin{equation}
   S = n S_{item} + S_{extra}
+  \label{eq:service_time}
 \end{equation}
 
 How the approximated values for \( S_{item} \) and \( S_{extra} \) are calculated is described in the next chapters. Since we considered constants \( S_{item} \) and \( S_{extra} \), the service time distribution follows the basket size distribution, shown in Figure~\ref{fig:basket_size_distribution}.
@@ -167,25 +168,19 @@ The same analysis was then conducted for the dwell time (see Figure~\ref{fig:dwe
 \subsection{Service time approximations}
 \label{subsec:service_time_approximations}
 
-As described in Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions}, an approximation of the checkouts' service time \( S \) can be obtained using the basket size by:
+As described in Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions}, an approximation of the checkouts' service time \( S \) can be obtained using the basket size \( n \) with the Eq. (\ref{eq:service_time}): \( S = n S_{item} + S_{extra} \). However, this approximation is feasible only if the number of products bought in each session is available. Unfortunately, that is not the case for every store, so other approximations were investigated.
 
-\begin{equation}
-  S = n S_{item} + S_{extra}
-\end{equation}
+An alternative approach is to use the average number of customers served by each terminal. Since the service rate should represent the maximum service capacity of each terminal, the periods where the counters spent some time in \emph{idle}, i.e. without serving any customer, had to be excluded from this approximation. Therefore, only the intervals with a measured queue length greater than a predetermined threshold were considered. This threshold was determined by analyzing the measured \emph{outflow rate} and comparing it to the \emph{total service rate} (with \(\text{total service rate} = \text{service rate} \cdot \text{number open terminals} \)). When the two measurements have similar values, the maximum service capacity has been reached and the checkouts have probably spent no time in idle, thus the number of customer served in that interval should give an accurate approximation of the actual service rate. However, again, this approach is implementable only if the dataset contains the queues’ status.
 
-However, this approximation is feasible only if the number of products bought in each session is available. Unfortunately, that is not the case for every store, so other approximations were investigated.
+In order to get an approximation that could be used in every setting, with data that is available independently from the store, the relation between the service and dwell times was researched. As shown in the Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions}, both measurements follow an erlang distribution. Intuitively, a longer dwell time should correspond to a greater amount of products bought (i.e. a greater basket size) and therefore a longer service time. However, this hypothesis was confuted by Berman et al.~\cite{berman}, which showed that there is no such relation between these two measurements, and by the correlation coefficient that resulted in a value of approximately \( 0.24 \). This is probably because the majority of the dwell time is spent looking and deciding and there could be other unrelated factors that influence the service time, such as the use of coupons and credit cards during the payment.
 
-An alternative approach is to use the average number of customers served by each terminal in a time interval. Since the service rate should represent the maximum service capacity of each terminal, the periods where the counters spent some time in \emph{idle}, i.e. without serving any customer, had to be excluded from the approximation. Therefore, only the intervals with a measured queue length greater than a predetermined threshold were considered. This threshold was determined by analyzing the measured \emph{outflow rate} and comparing it to the \emph{total service rate} (with \(\text{total service rate} = \text{service rate} \cdot \text{number open terminals} \)). When the two measurements have similar values, the maximum service capacity has been reached and the checkouts have probably spent no time in idle, thus the number of customer served in that interval should give an accurate approximation of the actual service rate. However, again, this approach is implementable only if the dataset contains the queues’ status data.
-
-To get an approximation that could be used in every setting, with data that is available independently from the store, the relation between the service and dwell times was researched. As shown in the Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions}, both measurements follow an erlang distribution. Intuitively, a longer dwell time should correspond to a greater amount of products bought (i.e. a greater basket size) and therefore a longer service time. For this reason, the basket size of a session could be used to get an approximation of the expected service time. To understand this relation, the correlation between the two measurements was calculated, but the results confuted this hypothesis, since the correlation coefficient resulted in a value of approximately \( 0.24 \). Moreover, Berman et al.~\cite{berman} showed that there is no such relation between these information. This means that the dwell time has no influence over the service time, probably because the majority of the dwell time is spent looking and deciding and there could be other unrelated factors that influence the service time, such as the use of coupons and credit cards during the payment.
-
-The last approach presented was given by the analysis of the time spent in idle by each terminal \( t_i \), that is the time in which a terminal does not have any customer to serve. To do so, the \emph{inter-exit times} \( \Delta t_e \) were calculated, that are the times passed between the consecutive exits of two customers served by the same counter:
+The last approach presented was given by the analysis of the time spent in idle by each terminal \( t_i \). To do so, the \emph{inter-exit times} \( \Delta t_e \) were calculated, that are the times passed between the consecutive exits of two customers served by the same counter:
 \begin{itemize}
-  \item if \( \Delta t_e > S \), the checkout has probably spent some time in idle, in particular \( t_i = \Delta t_e - S \). Moreover, if \( \Delta t_e \gg S \) the checkout is probably closed for that interval;
-  \item otherwise, if \( \Delta t_e \le S \), by the time the session’s purchase has been completed by the checkout, another customer is ready to be processed. In this case there is probably a waiting queue for that counter.
+  \item if \( \Delta t_e > S \), the checkout has probably spent some time in idle, in particular \( t_i = \Delta t_e - S \). If \( \Delta t_e \gg S \) the checkout is probably closed for that interval;
+  \item otherwise, if \( \Delta t_e \le S \), by the time the session’s purchase has been completed by the checkout, another customer is ready to be processed, and therefore \( t_i = 0 \). In this case there is probably a waiting queue for that counter.
 \end{itemize}
 
-The hours with peak outflow traffic, i.e. with minimum inter-exit rates, were taken in consideration to approximate the value of \( S \). That is because when the inter-exit times are low, there is probably a queue and consequently the checkouts should have spent no time in idle, meaning that \( t_i = 0 \) and \( S = \Delta t_e \). If the data about the products bought in each session is available, the approximated service time \( S \) thus obtained could be used to determine the values of \( S_{item} \) and \( S_{extra} \) introduced before.
+The hours with peak outflow traffic, i.e. with minimum inter-exit rates, were taken in consideration to approximate the value of \( S \). This is because when the inter-exit times are low, there is probably a queue and consequently the checkouts should have spent no time in idle, meaning that \( t_i = 0 \) and \( S = \Delta t_e \). If the data about the products bought in each session is available, the approximated service time \( S \) thus obtained could be used to determine the values of \( S_{item} \) and \( S_{extra} \) introduced before.
 
 \subsection{Service rate and open terminals count approximation}
 \label{subsec:service_rate_and_open_terminals_count_approximation}
@@ -195,9 +190,7 @@ Once an approximation of the service time \( S \) has been determined, the \emph
   \mu = \frac{\Delta t}{S}
 \end{equation}
 
-Intuitively, the total service rate should be directly influenced by the number of open terminals, considering that with more terminals available the total service capacity of the checkouts increases. For this reason, the relation between these two measurements were investigated. Since a direct measurement of the total service rate was not available and it is equal to the total number of customers that leave the checkout area and that, after a small delay, exit the store, the outflow rate was used as approximation. The correlation between the two measures resulted in a value of approximately \( 0.92 \), meaning that there is a strong linear relationship between them.
-
-To verify this relation, the mean of the service rates per terminal \( \bar{\mu} \) was used to obtain the outflow rate \( o(t) \) as:
+Intuitively, the total service rate should be directly influenced by the number of open terminals, considering that with more terminals the total service capacity increases. For this reason, the relation between these two measurements were investigated. Since a direct measurement of the total service rate was not available and it is equal to the total number of customers that leave the checkout area and then, after a small delay, exit the store, the \emph{outflow rate} was used as approximation. The correlation between the two measures resulted in a value of approximately \( 0.92 \), meaning that there is a strong linear relationship between them. To further verify this relation, the mean of the service rates per terminal \( \bar{\mu} \) was used to obtain the outflow rate \( o(t) \), as:
 \begin{equation}
   o(t) = c(t) \cdot \bar{\mu} = c(t) \cdot \frac{\Delta t}{\bar{S}}
 \end{equation}
@@ -208,8 +201,9 @@ A comparison between the approximated and real outflow rate can be seen in Figur
   \begin{center}
     \inputpgf{img}{outflow_approximation.pgf}
   \end{center}
-  \caption{The real outflow rate with the corresponding service-rate-based approximation.}
+  \caption{Example of the measured outflow rate with the corresponding service-rate-based approximation.}
   \label{fig:outflow_approximation}
 \end{figure}
 
+\medskip
 \clearpage
