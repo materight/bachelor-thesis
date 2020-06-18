@@ -6,12 +6,12 @@ This chapter describes the methods used to build the final predictive model. As 
 \section{Inflow rate forecast}
 \label{sec:inflow_rate_forecast}
 
-Since the inflow rate can be expressed as a time series, different time series predictive models, presented in Section~\ref{sec:time_series_forecasting}, were tested. This section discusses the implementation details of these models, while a comparison of the obtained results and performances is presented in Section~\ref{sec:inflow_rate_forecast_results}
+Since the inflow rate can be expressed as a time series, different time series predictive models, already presented in Section~\ref{sec:time_series_forecasting}, were tested. This section discusses the implementation details of these models, while a comparison of the obtained results and performances is presented in Section~\ref{sec:inflow_rate_forecast_results}
 
 \subsection{Persistence model}
 \label{subsec:persistence_model}
 
-The first presented model was used only to define a performance baseline. This gave an idea of how well the other models could perform on the data and set a minimum accuracy level: if a model’s performances were worse than this baseline, it was discarded and not considered. This baseline was obtained by using a \emph{persistence model}, where the last measured value \( y_{t-1} \) is simply used as forecast for the next time interval \( t \):
+The first model presented was used only to define a performance baseline. This gave an idea of how well the other models could perform on the data and set a minimum accuracy level: if a model’s performances were worse than this baseline, it was discarded and not considered. This baseline was obtained by using a \emph{persistence model}, where the last measured value \( y_{t-1} \) is simply used as forecast for the next time interval \( t \):
 \begin{equation}
   \hat{y}_t = y_{t-1}
 \end{equation}
@@ -19,13 +19,13 @@ The first presented model was used only to define a performance baseline. This g
 \subsection{Drift model}
 \label{subsec:drift_model}
 
-As seen in Chapter~\ref{cha:data_analysis}, the inflow rate time series presents a strong seasonal component, so basing the forecast on this repeating pattern could results in good accuracy. The forecast values were calculated as the average of the values in the previous weeks from the same week day and time, as:
+As seen in Chapter~\ref{cha:data_analysis}, the inflow rate time series presents a strong seasonal component, so basing the forecast on this repeating pattern could results in a good accuracy. The forecast values were calculated as the average of the values in the previous weeks from the same week day and time, as:
 \begin{equation}
   \hat{y}_t = \hat{f}(t) = \frac{1}{N} \sum_{i=1}^{N} y_{t-iW}
 \end{equation}
 where \( W \) is the number of intervals in a week and \( N \) is the number of previous weeks considered. Since we used 10-minute intervals, \( W = 1008 \). This method is accurate only if the cyclic patterns maintain the same levels every day, without any random variation.
 
-To take in account this variations in the inflow rate that can be caused by external factors, e.g. holidays and special promotions, a \emph{local drift} was calculated using the errors of the forecasted values for the immediate past:
+To take in account these variations in the inflow rate, that can be caused by external factors like holidays or special promotions, a \emph{local drift} was calculated using the errors of the forecasted values for the immediate past:
 \begin{equation}
   \hat{y}_t = \hat{f}(t) + \frac{1}{M} \sum_{i=1}^{M} y_{t-i} - \hat{f}(t-i)
 \end{equation}
@@ -36,11 +36,11 @@ were \( M \) is the number of previous steps to be considered by the drift. We c
 
 As stated in Section~\ref{subsec:artificial_neural_networks}, artificial neural networks are a popular and effective technique for time series forecasting. In the same section, \emph{autoregressive neural networks} were introduced with the notation \( \text{AR-NN}(p, P, k)_m \).
 
-Since the inflow rate values present a strong correlation with the previous values, as seen in Section~\ref{subsec:inflow_rate_autocorrelation}, the time series is non-stationary, and therefore the dataset must be rendered stationary before training the model. This was done by \emph{differencing} the time series, i.e. by calculating the difference between consecutive observations (also called \emph{first-order differencing}). Each value of the differenced time series can be written as \( y'_t = y_t - y_{t-1} \). This transformation can help stabilize the mean of the time series, reducing the effects of trend and seasonalities. Since the time series present a strong seasonal component, a seasonal differencing was also applied, written as \( y'_t = y_t - y_{t-m} \), where \( m \) is the number of lags in a seasonal cycle. A daily seasonal cycle was taken in account, so \( m = 144 \). Both differentiations were applied to obtain stationarity, thus each observation of the final time series used to train the model was calculated as:
+Since the inflow rate's values present a strong correlation with the previous values, as seen in Section~\ref{subsec:inflow_rate_autocorrelation}, the time series is non-stationary, and therefore the dataset must be rendered stationary before training the model. This was done by \emph{differencing} the time series, i.e. by calculating the difference between consecutive observations (also called \emph{first-order differencing}). Each value of the differenced time series can be written as \( y'_t = y_t - y_{t-1} \). This transformation can help stabilize the mean of the time series, reducing the effects of trend and seasonalities. Since the time series present a strong seasonal component, a seasonal differencing was also applied, written as \( y'_t = y_t - y_{t-m} \), where \( m \) is the number of lags in a seasonal cycle. A daily seasonal cycle was taken in account, so \( m = 144 \). Both differentiations were applied to obtain stationarity, thus each observation of the final time series used to train the model was calculated as:
 \begin{equation}
   y''_t = y'_t - y'_{t-1} = (y_t - y_{t-m}) - (y_{t-1} - y_{t-m-1})
 \end{equation}
-The PACF analysis of the differenced time series in Figure~\ref{fig:stationary_inflow_rate_acf} shows that this approach is effective in making the time series stationary.
+The ACF analysis of the differenced time series in Figure~\ref{fig:stationary_inflow_rate_acf} shows that this approach is effective in making the time series stationary.
 
 \begin{figure}
   \begin{center}
@@ -50,12 +50,12 @@ The PACF analysis of the differenced time series in Figure~\ref{fig:stationary_i
   \label{fig:stationary_inflow_rate_acf}
 \end{figure}
 
-As stated in Section~\ref{subsec:artificial_neural_networks}, given a target value \( y_{t+1} \), each input sample can be written as:
+As stated in Section~\ref{subsec:artificial_neural_networks}, given a target value \( y_{t+1} \), each sample in input can be written as:
 \[
   (y_{t}, y_{t-1}, ..., y_{t-p}, y_{t-m}, y_{t-2m}, ..., y_{t-Pm})
 \]
 
-The model used a MSE (Mean Squared Error) loss function and a \emph{sigmoid} activation function. The ANN trained over a batch size of \( 24 \cdot 6 = 144 \) samples, that is the number of observations in a day. The training was then repeated for a total of \( 100 \) epochs. Various parameters values for \( p \), \( P \) and \( k \) were tested and the model with the best performance was used. The obtained results and accuracy are discussed in Section~\ref{sec:inflow_rate_forecast_results}.
+The model used a MSE (Mean Squared Error) loss function and a \emph{sigmoid} activation function. The ANN was trained over a batch size of \( 24 \cdot 6 = 144 \) samples, that is the number of observations in a day. The training was then repeated for a total of \( 100 \) epochs. Various parameters values for \( p \), \( P \) and \( k \) were tested and the model with the best performance was used. The obtained results and accuracy are discussed in Section~\ref{sec:inflow_rate_forecast_results}.
 
 \subsection{SARIMA model}
 \label{subsec:sarima_model}
@@ -72,31 +72,31 @@ In Section~\ref{subsec:arima_models} the ARIMA model and some of its evolutions 
 
 The parameters configuration can be written as \( \text{SARIMA}(p,d,q)(P,D,Q)_m \). For some of these parameters, the optimal values can be determined by the analysis of the time series, while the only possible approach for the others is to try different values and select the ones that minimize the forecasting errors. By the results obtained in Chapter~\ref{cha:data_analysis}, we can set:
 \begin{itemize}
-  \item \( d = 1 \) and \( D = 1 \) for respectively first-order and seasonal differencing. By doing this we achieve the same type of differencing explained in the previous section;
-  \item \( q = 6 \) and \( Q = 3 \), obtained by the PACF analysis of the differenced time series. Specifically, the plot shows an exponential decay in the seasonal lags of the PACF (e.g at lags 1, 144, 288, ...). For this reason, the number of significant autocorrelation coefficients gives a good approximation for \( q \) and \( Q \)~\cite{hyndman2018};
-  \item \( m = 144 \) that is the daily seasonal cycle length, i.e. the number of 10-minute intervals in a day.
+  \item \( d = 1 \) and \( D = 1 \) for respectively first-order and seasonal differencing. By doing this, we achieve the same type of differencing explained in the previous section;
+  \item \( q = 6 \) and \( Q = 3 \), obtained by the PACF analysis of the differenced time series. Specifically, the plot shows an exponential decay on the seasonal lags of the PACF (e.g at lags 144, 288, ...). For this reason, the number of significant autocorrelation coefficients gives a good approximation for \( q \) and \( Q \)~\cite{hyndman2018};
+  \item \( m = 144 \), that is the daily seasonal cycle length, i.e. the number of 10-minute intervals in a day.
 \end{itemize}
 
-In 2007, Hyndman et al.~\cite{hyndman2007} proposed the \emph{Hyndman-Khandakar algorithm}, which combines unit root tests, minimization of the \emph{Akaike’s Information Criterion} (AIC) and \emph{Maximum Likelihood Estimation} (MLE) to automatically determine the best parameters for the SARIMA model. While this method is very computational expensive and does not always returns the best configuration, it removes a lot of the steps and trials involved in the parameters determination, simplifying the whole process. By using this technique, the previous parameters values were confirmed to be the optimal ones. Moreover, the results showed that by using \( p = 0 \) and \( P = 0 \) the best accuracy was obtained.
+In 2007, Hyndman et al.~\cite{hyndman2007} proposed the \emph{Hyndman-Khandakar algorithm}, which combines unit root tests, minimization of the \emph{Akaike’s Information Criterion} (AIC) and \emph{Maximum Likelihood Estimation} (MLE) to automatically determine the best parameters for the SARIMA model. While this method is very computational expensive and does not always returns the best configuration, it removes a lot of the steps and trials involved in the parameters determination, simplifying the whole process. By using this technique, the parameters values presented previously were confirmed to be the optimal ones. Moreover, the results showed that by using \( p = 0 \) and \( P = 0 \) the best accuracy was obtained.
 
 \section{Arrival rate forecast}
 \label{sec:arrival_rate_forecast}
 
 Once a predictive model was defined, the measured and forecasted inflow rates were combined and used to get a prediction of the \emph{arrival rate} at the checkouts. Since the inflow rate into the shop appears with a delay at the checkout area, and this delay is the customer's dwell time, a time-dependent probability density function \( p_t(\tau) \) is required, where \( \tau \) is the expected dwell time of a customer~\cite{aksu}.
 
-In Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions} the general distribution of the dwell time was presented and with the analysis of Section~\ref{sec:time_series_analysis} it is clear that these values are strongly time-dependent, thus it can be seen as a stochastic process \( \{ X_t \} \) with \( X_t \sim \text{Erlang}(k_t, n_t) \), where \( k_t = \text{E}[X_t]^2 / \text{Var}[X_t] \) and \( n_t =  \text{E}[X_t] / \text{Var}[X_t] \). Given the weekly and daily seasonality of the time series, different \( X_t \) distributions were defined for each interval on every week day, for a total of \( 7 \cdot 24 \cdot 6 = 1008 \) distributions, since 10-minute intervals are used. Each aforementioned distribution was obtained by calculating the values for \( \text{E}[X_t] \) and \( \text{Var}[X_t] \) from the observations of the previous weeks on the same interval and week day.
+In Section~\ref{sec:dwell_time_inflow_rate_service_time_distributions} the general distribution of the dwell time was presented and, with the analysis of Section~\ref{sec:time_series_analysis}, it is clear that it is strongly time-dependent, thus it can be seen as a stochastic process \( \{ X_t \} \) with \( X_t \sim \text{Erlang}(k_t, n_t) \), where \( k_t = \text{E}[X_t]^2 / \text{Var}[X_t] \) and \( n_t =  \text{E}[X_t] / \text{Var}[X_t] \). Given the weekly and daily seasonality of the time series, different \( X_t \) distributions were defined for each interval on every week day, for a total of \( 7 \cdot 24 \cdot 6 = 1008 \) distributions, since 10-minute intervals were used. Each aforementioned distribution was obtained by calculating the values for \( \text{E}[X_t] \) and \( \text{Var}[X_t] \) from the observations of the previous weeks on the same interval and week day.
 
 Let \( \lambda(t) \) be the \emph{predicted arrival rate} for the time interval \( t \), \( \Delta t \) the intervals size, \( p_t(\tau_i) \) the probability of having a dwell time of \( \tau_i \), with \( (i-1) \Delta t < \tau_i \leq i \Delta t \), and \( y_{t-i} \) the \emph{measured inflow rate} at time \( t-i \). We can approximate \( \lambda(t) \) by:
 \begin{equation}
   \lambda(t) = \sum_{i=1}^{\infty} y_{t-i} \cdot p_t(\tau_i)
 \end{equation}
 
-Since after a certain \( \tau_i \) value, \( p_t(\tau_i) \) becomes insignificant, we can limit the number of values to be considered by defining a maximum dwell time \( \tau_{max} \), that can be set either by a customizable parameter or by analyzing the dwell times distribution (e.g. by using the \emph{95th percentile}). In any case, \( \tau_{max} \) should be such that \( p_t(\tau_{max} + \Delta t) \) tends to zero. We can then rewrite the previous formula as:
+Since after a certain \( \tau_i \) value, \( p_t(\tau_i) \) becomes irrelevant, we can limit the number of values to be considered by defining a maximum dwell time \( \tau_{max} \), that can be set either by a customizable parameter or by analyzing the dwell times distribution (e.g. by using the \emph{95th percentile}). In any case, \( \tau_{max} \) should be such that \( p_t(\tau_{max} + \Delta t) \) tends to zero. We can then rewrite the previous formula as:
 \begin{equation}
   \lambda(t) = \sum_{i=1}^{K} y_{t-i} \cdot p_t(\tau_i)
   \label{eq:arrival_rate1}
 \end{equation}
-where \( K \) is such that \( \tau_K \leq \tau_{max} \leq \tau_{k+1} \). This equation is however applicable only if the measured values for \( y_{t-1}, y_{t-2}, ..., y_{y-K} \) are known, thus only when \( t \leq t_{now} \), where \( t_{now} \) is the current interval when these computations are completed. If \( t > t_{now} \), a forecast of the inflow rate, as described in Section~\ref{sec:inflow_rate_forecast}, must be used to provide the missing information. For this reason, we define a function \( \text{in}(t) \) as:
+where \( K \) is such that \( \tau_K \leq \tau_{max} \leq \tau_{k+1} \). This equation is however applicable only if the measured values for \( y_{t-1}, y_{t-2}, ..., y_{y-K} \) are known, thus only when \( t \leq t_{now} \), where \( t_{now} \) is the current interval when those calculations are executed. If \( t > t_{now} \), a forecast of the inflow rate, as described in Section~\ref{sec:inflow_rate_forecast}, must be used to provide the missing information. For this reason, we define a function \( \text{in}(t) \) as:
 \begin{equation}
   \text{in}(t) = \\
   \begin{cases}
@@ -104,7 +104,7 @@ where \( K \) is such that \( \tau_K \leq \tau_{max} \leq \tau_{k+1} \). This eq
     \hat{y}_{t} & \quad \text{otherwise}
   \end{cases}
 \end{equation}
-where \( y_t \) and \( \hat{y}_t \) are respectively the measured and predicted inflow rate at time \( t \). It shall be noted that the real measurements for an interval are available only once the said interval is ended, hence the reason for using \( y_t \) only when \( t < t_{now} \). The equation~(\ref{eq:arrival_rate1}) is therefore rewritten as:
+where \( y_t \) and \( \hat{y}_t \) are respectively the measured and predicted inflow rate at time \( t \). It shall be noted that the real measurements for an interval are available only once the said interval is ended, hence the reason for using \( y_t \) only when \( t < t_{now} \). The Equation~(\ref{eq:arrival_rate1}) is therefore rewritten as:
 \begin{equation}
   \lambda(t) = \sum_{i=1}^{K} \text{in}(t-i) \cdot p_t(\tau_i)
 \end{equation}
