@@ -155,7 +155,7 @@ As described in Section~\ref{subsec:service_time_approximations}, when the time 
 \subsection{Queue length approximation}
 \label{subsec:queue_length_approximation}
 
-As described in Section~\ref{sec:queueing_theory}, the standard queueing theory does not support time-varying arrival rates with temporal overloading. The only approach that seemed to fit the context of this research was the \emph{Stationary Backlog-Carryover} (SBC) approach proposed by Stolletz in 2008~\cite{stolletz}. SBC is based on a \( M/M/c/c \) model, in which a maximum number of \( c \) customers can be in the queue at any time, and any further arrival to the queue is considered \emph{blocked} (i.e. lost), and uses an artificial arrival rate \( \widetilde{\lambda}_t \) to take in account the temporal overloading of the queue, allowing standard queueing models to be used. \( \widetilde{\lambda}_t \) consists of both the average arrival rate \( \lambda_t \) and the \emph{backlog rate} of the previous period \( b_{t-1} \), that is the rate of customers leaving the system due to blocking in the former period.
+As described in Section~\ref{sec:queueing_theory}, the standard queueing theory does not support time-varying arrival rates with temporal overloading. The only approach that seemed to fit the context of this research was the \emph{Stationary Backlog-Carryover} (SBC) approach, proposed by Stolletz in 2008~\cite{stolletz}. SBC is based on a \( M/M/c/c \) model, in which a maximum number of \( c \) customers can be in the queue at any time and any further arrival is considered \emph{blocked} (i.e. lost), and uses an artificial arrival rate \( \widetilde{\lambda}_t \) to take in account the temporal overloading of the queue, allowing standard queueing models to be used. \( \widetilde{\lambda}_t \) consists of both the average arrival rate \( \lambda_t \) and the \emph{backlog rate} of the previous period \( b_{t-1} \), that is the rate of customers leaving the system due to blocking in the former period.
 
 Let \( P_t(B) \) be the steady-state probability of blocking for the \( M/M/c/c \) model in period \( t \) with artificial arrival rate \( \widetilde{\lambda}_t \). The backlog rate \( b_t \) is given by:
 \begin{equation}
@@ -169,7 +169,7 @@ Starting with \( \widetilde{\lambda}_1 = \lambda_1 \) and \( b_0 = 0 \), we can 
   \widetilde{\lambda}_t = \lambda_t + b_{t-1} = \lambda_t + \widetilde{\lambda}_{t-1} \cdot P_{t-1}(B)
 \end{equation}
 
-By doing this, the customers not served in period \( t-1 \) are evenly spread over period \( t \). The value for \( P_t(B) \) is obtained by the \emph{Erlang’s loss} formula:
+By doing this, the customers not served in period \( t-1 \) are evenly spread over period \( t \). The probability \( P_t(B) \) is obtained by the \emph{Erlang’s loss} formula:
 \begin{equation}
   P_t(B) = \frac{(\widetilde{\lambda}_t / \mu_t)^{c_t}}{c_t!\sum_{k=0}^{c_t} \frac{(\widetilde{\lambda}_t / \mu_t)}{k!}}
 \end{equation}
@@ -182,7 +182,7 @@ The expected servers utilization \( \rho_t \) can be then calculated as:
 
 Stolletz proposed two different approximations for the expected number of customers in the queue, the first based on a \emph{Modified Arrival Rate} (MAR) and the second based on \( \rho_t \) and \( b_t \)~\cite{stolletz}.
 
-The MAR approach uses an \( M/M/c/\infty \) queueing model with the same utilization factor \( \rho_t \) of the \( M/M/c/c \) model analyzed in the previous step. To do so, a modified arrival rate \( \lambda_t^{MAR} \) is chosen such that the model reach the approximated \( \rho_t \) obtained by Eq.~(\ref{eq:servers_utilization}), in particular:
+The MAR approach uses an \( M/M/c/\infty \) queueing model, with the same utilization factor \( \rho_t \) of the \( M/M/c/c \) model analyzed in the previous step. To do so, a modified arrival rate \( \lambda_t^{MAR} \) is chosen such that the model reach the approximated \( \rho_t \) obtained by Eq.~(\ref{eq:servers_utilization}), in particular:
 \begin{equation}
   \lambda_t^{MAR} = \rho_t c_t \mu_t
 \end{equation}
@@ -259,14 +259,14 @@ The optimal number of open checkouts \( c \) for the next future period \( t+1 \
   \caption{\label{alg:checkouts_optimization}Determine the optimal checkouts configuration.}
 \end{algorithm}
 
-Alternatively, a maximum waiting time \( Ws_{max} \) can be used as threshold, instead of \( Ls_{max} \). In that case the algorithm remains the same but with \( \text{Ls}(c) \) and \( Ls_{max} \) respectively replaced by \( \text{Ws}(c) \) and \( Ws_{max} \).
+Alternatively, a maximum waiting time \( Ws_{max} \) can be used as threshold, instead of \( Ls_{max} \). In that case the algorithm remains the same but with \( Ls(c) \) and \( Ls_{max} \) respectively replaced by \( Ws(c) \) and \( Ws_{max} \).
 
 \subsection{Opening/closing fluctuations control}
 \label{subsec:opening_closing_fluctuations_control}
 
 In order to avoid opening and closing checkouts too frequently, an additional control has to be implemented. For example, it should be possible to exceed the maximum waiting time limit for a short period of time, to avoid opening a new counter that would not be fully used after this short high-traffic period is ended. The system should therefore evaluate if it is necessary to change the checkouts configuration in a new state which is persistent for a relevant amount of time, or if the increased traffic is transient and would last for just a short period. If such trend is not persistent, there should be no changes in the actual number of open checkouts.
 
-To do so, a multi-step forecast must be implemented. For example, let \( \hat{c}_{t+1} \) be the forecasted optimal configuration for the next interval and \( c_t \) the current configuration. If \( \hat{c}_{t+1} > c_t \), \( \hat{c}_{t+2}, \hat{c}_{t+3}, ..., \hat{c}_{t+n} \) must also be computed to make a decision. If the trend is not persistent, e.g. \( \hat{c}_{t+2} = c_t \), there should be no changes in the configuration. We can thus define two store-based customizable parameter:
+To do so, a multi-step forecast must be implemented. For example, let \( \hat{c}_{t+1} \) be the forecasted optimal configuration for the next interval and \( c_t \) the current configuration. If \( \hat{c}_{t+1} > c_t \), the values for \( \hat{c}_{t+2}, \hat{c}_{t+3}, ..., \hat{c}_{t+n} \) must also be computed to make a decision. If the trend is not persistent, e.g. \( \hat{c}_{t+2} = c_t \), there should be no changes in the configuration. We can thus define two store-based customizable parameter:
 \begin{itemize}
   \item \( n \): the number of future steps that shall be analyzed, with \( n \ge 2 \);
   \item \( m \): the minimum number of steps that should present the new trend level, with \( m \le n \).
