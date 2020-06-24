@@ -6660,7 +6660,7 @@
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsys@transformshift{2.950000in}{0.470000in}%
-\pgftext[left,bottom]{\pgfimage[interpolate=true,width=0.170000in,height=3.430000in]{inflow_rate_heatmap-img0.png}}%
+\pgftext[left,bottom]{\pgfimage[interpolate=false,width=0.170000in,height=3.430000in]{inflow_rate_heatmap-img0.png}}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
@@ -6829,7 +6829,7 @@
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsys@transformshift{6.380000in}{0.470000in}%
-\pgftext[left,bottom]{\pgfimage[interpolate=true,width=0.170000in,height=3.430000in]{inflow_rate_heatmap-img1.png}}%
+\pgftext[left,bottom]{\pgfimage[interpolate=false,width=0.170000in,height=3.430000in]{inflow_rate_heatmap-img1.png}}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetbuttcap%
