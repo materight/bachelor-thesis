@@ -48,7 +48,6 @@
 \pgfsetlinewidth{0.000000pt}%
 \definecolor{currentstroke}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{currentstroke}%
-\pgfsetstrokeopacity{0.000000}%
 \pgfsetdash{}{0pt}%
 \pgfpathmoveto{\pgfqpoint{0.621528in}{0.472778in}}%
 \pgfpathlineto{\pgfqpoint{3.143750in}{0.472778in}}%
@@ -639,7 +638,6 @@
 \pgfsetlinewidth{0.000000pt}%
 \definecolor{currentstroke}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{currentstroke}%
-\pgfsetstrokeopacity{0.000000}%
 \pgfsetdash{}{0pt}%
 \pgfpathmoveto{\pgfqpoint{3.857778in}{0.472778in}}%
 \pgfpathlineto{\pgfqpoint{6.380000in}{0.472778in}}%
@@ -653,9 +651,8 @@
 \pgfusepath{clip}%
 \pgfsetbuttcap%
 \pgfsetroundjoin%
-\definecolor{currentfill}{rgb}{0.121569,0.466667,0.705882}%
+\definecolor{currentfill}{rgb}{0.78,0.867,0.925}%
 \pgfsetfillcolor{currentfill}%
-\pgfsetfillopacity{0.250000}%
 \pgfsetlinewidth{0.000000pt}%
 \definecolor{currentstroke}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{currentstroke}%

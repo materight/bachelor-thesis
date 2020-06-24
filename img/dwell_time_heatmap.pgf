@@ -48,7 +48,6 @@
 \pgfsetlinewidth{0.000000pt}%
 \definecolor{currentstroke}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{currentstroke}%
-%% \pgfsetstrokeopacity{0.000000}%
 \pgfsetdash{}{0pt}%
 \pgfpathmoveto{\pgfqpoint{0.472778in}{0.472778in}}%
 \pgfpathlineto{\pgfqpoint{2.821327in}{0.472778in}}%
@@ -3346,7 +3345,6 @@
 \pgfsetlinewidth{0.000000pt}%
 \definecolor{currentstroke}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{currentstroke}%
-%%\pgfsetstrokeopacity{0.000000}%
 \pgfsetdash{}{0pt}%
 \pgfpathmoveto{\pgfqpoint{3.912778in}{0.472778in}}%
 \pgfpathlineto{\pgfqpoint{6.261327in}{0.472778in}}%
