@@ -1,7 +1,15 @@
 \chapter{Solution}
 \label{cha:solution}
 
-This chapter describes the methods used to build the final predictive model. As stated previously, the main goal of this research is to optimize the number of open checkouts while maintaining the waiting times under a predetermined threshold. To reach it, the final model is composed of different submodules that cooperates sequentially, so that the results of a submodule are used as input to the next one. First, the \emph{measured inflow rate} of the recent past is combined with a \emph{forecasted inflow rate} of the immediate future. These values, combined with a \emph{dwell time forecast}, are used to obtain a prediction of the \emph{arrival rate at the checkouts}. The arrival rate, the number of \emph{open counters} and the approximated \emph{service rate} are then processed with queueing theory techniques to calculate the expected queue length for a given interval. Finally, different values for the number of available checkouts can be tested to obtain the minimum staff allocation that ensures that the predefined maximum queue length limit is not exceeded.
+This chapter describes the methods used to build the final predictive model. As stated previously, the main goal of this research is to optimize the number of open checkouts while maintaining the waiting times under a predetermined threshold. In order to reach it, the final model is composed of different submodules that cooperates sequentially, so that the results of a submodule are used as input to the next one, as shown in Figure \ref{fig:model_architecture}. First, the \emph{measured inflow rate} of the recent past is combined with a \emph{forecasted inflow rate} of the immediate future. These values, combined with a \emph{dwell time forecast}, are used to obtain a prediction of the \emph{arrival rate at the checkouts}. The arrival rate, the number of \emph{open counters} and the approximated \emph{service rate} are then processed with queueing theory techniques to calculate the expected queue length for a given interval. Finally, different values for the number of available checkouts can be tested to obtain the minimum staff allocation that ensures that the predefined maximum queue length limit is not exceeded.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=1\textwidth]{img/model_architecture.pdf}
+  \end{center}
+  \caption{The architecture of the final predictive model.}
+  \label{fig:model_architecture}
+\end{figure}
 
 \section{Inflow rate forecast}
 \label{sec:inflow_rate_forecast}
@@ -162,9 +170,7 @@ Let \( P_t(B) \) be the steady-state probability of blocking for the \( M/M/c/c 
   b_t = \widetilde{\lambda}_t \cdot P_t(B)
 \end{equation}
 
-These blocked customers are carried over into the period \( t+1 \), which results in the artificial arrival rate \( \widetilde{\lambda}_{t+1} \).
-
-Starting with \( \widetilde{\lambda}_1 = \lambda_1 \) and \( b_0 = 0 \), we can define the artificial arrival rate recursively through:
+These blocked customers are carried over into the period \( t+1 \), which results in the artificial arrival rate \( \widetilde{\lambda}_{t+1} \). Starting with \( \widetilde{\lambda}_1 = \lambda_1 \) and \( b_0 = 0 \), we can define the artificial arrival rate recursively through:
 \begin{equation}
   \widetilde{\lambda}_t = \lambda_t + b_{t-1} = \lambda_t + \widetilde{\lambda}_{t-1} \cdot P_{t-1}(B)
 \end{equation}
@@ -216,19 +222,12 @@ and the total number of customers in the system \( Ls_t^{A1} \) by:
 
 However, they showed that the expected queue length is often overestimated by the A1 approximation. An improvement was obtained by reducing the approximated \( Lq_t^{A1} \) value by the expected number of non-busy servers \( c_t (1 - \rho_t) \) (\emph{A2 approximation}), such that:
 \begin{equation}
-  Lq_t^{A2} = max\{0, Lq_t^{A1} - c_t (1 - \rho_t)\}
-\end{equation}
-and
-\begin{equation}
-  Ls_t^{A2} = Lq_t^{A2} + c_t \rho_t
+  Lq_t^{A2} = max\{0, Lq_t^{A1} - c_t (1 - \rho_t)\}  \;\;\;\text{and}\;\;\;  Ls_t^{A2} = Lq_t^{A2} + c_t \rho_t
 \end{equation}
 
 Once the number of customers in queue has been determined, Little’s Law~(\ref{eq:little_law})~\cite{little} can be used to calculate the expected queue and system waiting times, respectively \( Wq_t \) and \( Ws_t \), as:
 \begin{equation}
-  Wq_t = Lq_t / \lambda^{MAR}_t
-\end{equation}
-\begin{equation}
-  Ws_t = Ls_t / \lambda^{MAR}_t
+  Wq_t = Lq_t / \lambda^{MAR}_t  \;\;\;\text{and}\;\;\;  Ws_t = Ls_t / \lambda^{MAR}_t
 \end{equation}
 
 The results and performances of each approximation are discussed in Section~\ref{sec:queue_length_forecast_results}.
