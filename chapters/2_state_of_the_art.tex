@@ -40,7 +40,7 @@ Once the main components of the time series have been determined, a predictive m
 
 In the \emph{Simple Exponential Smoothing} (SES) technique, the forecasted values are based on a weighted average of the previous values, where the most recent observations are given more importance using larger weights~\cite{brown}.
 
-A more complex implementation of the same principle is the \emph{Holt-Winters Exponential Smoothing} method, which is able to decompose the time series into a level, trend and seasonal component, giving a more precise forecast~\cite{holt,winters}. However, it is not possible to model more complex series with multiple seasonality patterns, as in a supermarket inflow rate which presents daily and weekly seasonalities.
+A more complex implementation of the same principle is the \emph{Holt-Winters Exponential Smoothing} method, which is able to decompose the time series into a level, trend and seasonal component, giving a more precise forecast~\cite{holt}. However, it is not possible to model more complex series with multiple seasonality patterns, as in a supermarket inflow rate which presents daily and weekly seasonalities.
 
 Taylor’s \emph{Double Seasonal Exponential Smoothing} method was developed to forecast time series with two seasonal cycles: a short one that repeats itself many times within a longer one~\cite{taylor}.
 
