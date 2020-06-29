@@ -12,20 +12,20 @@ From these analyses, the system developed by Thinkinside is also able to suggest
 
 Both presented requirements, maximizing customers satisfaction by preventing queues and maximizing store operations by reducing the number of available terminals, conflict with each other, meaning that an optimal compromise must be designed. The purpose of this research is to find such compromise, that should allow to control and reduce the working time beyond the checkouts without creating long waiting queues. This problem could be approached in three different ways:
 \begin{itemize}
-  \item minimizing the number of open counters, such that a predetermined maximum threshold for the queue length (or waiting time) is not exceeded;
-  \item minimizing the queue length, such that a predetermined maximum threshold for the number of open counters, and therefore for the staffing level, is not exceeded;
-  \item defining a “cost function” that quantizes both factors by assigning them a value in terms of costs. By taking in account the inflow traffic, the optimal values for the two factors can be determined such that the cost function is minimized.
+  \item Minimizing the number of open counters, such that a predetermined maximum threshold for the queue length (or waiting time) is not exceeded.
+  \item Minimizing the queue length, such that a predetermined maximum threshold for the number of open counters, and therefore for the staffing level, is not exceeded.
+  \item Defining a “cost function” that quantizes both factors by assigning them a value in terms of costs. By taking in account the inflow traffic, the optimal values for the two factors can be determined such that the cost function is minimized.
 \end{itemize}
 
 While the last approach could give the best results, it is difficult to assign a value in terms of costs to the length of a queue or to the number of open terminals, since it may depend on other external factors and specific store policies. Considering that it is easier to manipulate the number of open counters, the first approach was therefore chosen and researched. This approach is based on two main assumptions:
 \begin{itemize}
-  \item optimizing the number of open checkouts in a supermarket decreases the total staff’s idle time during the shifts at the counters;
-  \item it is possible to decrease the number of open checkouts without any loss on the overall customers satisfaction, represented by the waiting queues length.
+  \item Optimizing the number of open checkouts in a supermarket decreases the total staff’s idle time during the shifts at the counters.
+  \item It is possible to decrease the number of open checkouts without any loss on the overall customers satisfaction, represented by the waiting queues length.
 \end{itemize}
 
 As explained before, a predictive model for the expected queue length is necessary for this optimization to be effective. This requirement introduces another hypothesis that must hold:
 \begin{itemize}
-  \item it is possible to forecast the waiting queue length by analyzing the customers’ shopping behavior in the previous periods.
+  \item It is possible to forecast the waiting queue length by analyzing the customers’ shopping behavior in the previous periods.
 \end{itemize}
 
 The next chapters explore and validate these hypotheses by the analysis of real-world data from two different supermarkets.
