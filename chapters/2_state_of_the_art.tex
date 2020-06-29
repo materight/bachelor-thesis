@@ -24,23 +24,23 @@ Aksu H.~\cite{aksu} main goal was to optimize the idle time of the staff operati
 \section{Time series forecasting}
 \label{sec:time_series_forecasting}
 
-A \emph{time series} is a collection of observations made sequentially through time. Since the customers traffics levels can be seen as points in time, we can take advantage of many time series analysis techniques and prediction models. \emph{Time series forecasting} is the use of a model to predict future values based on previous observations. A time series can be decomposed into three main components:
+A \emph{time series} is a collection of observations made sequentially through time. Since the customers traffic levels can be seen as points in time, many time series analysis techniques and prediction models can be used. \emph{Time series forecasting} is the use of a model to predict future values based on previous observations. A time series can be decomposed into three main components:
 \begin{itemize}
   \item \emph{Trend} (\( T_t \)): linear/nonlinear, increasing/decreasing behavior of the series over time.
   \item \emph{Seasonality} (\( S_t \)): repeating patterns or cycle behavior over time.
   \item \emph{Residual} (\( R_t \)): variability of the observations not explainable by the model.
 \end{itemize}
 
-There are two types of decomposition: \emph{additive}, where the time series would be written as \( y_t = T_t + S_t + R_t \), and \emph{multiplicative}, where \( y_t = T_t \cdot S_t \cdot R_t \). The additive decomposition is the most appropriate if the magnitude of the seasonal fluctuations, or the variation around the trend-cycle, does not vary with the level of the time series. When the variation in the seasonal pattern, or the variation around the trend-cycle, appears to be proportional to the level of the time series, then a multiplicative decomposition is more appropriate.
+There are two types of decomposition: \emph{additive}, where the time series would be written as \( y_t = T_t + S_t + R_t \), and \emph{multiplicative}, where \( y_t = T_t \cdot S_t \cdot R_t \). The additive decomposition is the most appropriate if the magnitude of the seasonal fluctuations, or the variation around the trend-cycle, does not vary with the level of the time series. When the variation in the seasonal pattern appears to be proportional to the level of the time series, then a multiplicative decomposition is more appropriate.
 
 Once the main components of the time series have been determined, a predictive model can be defined. There are many different time series forecasting methods available, the most popular and effective are presented in the next sections.
 
 \subsection{Exponential smoothing}
 \label{subsec:exponential_smoothing}
 
-In the \emph{Simple Exponential Smoothing} (SES) technique, the forecasted values are based on a weighted average of the previous values, where the most recent observations are given more importance using larger weights~\cite{brown}.
+In the \emph{Simple Exponential Smoothing} (SES) method, the forecasted values are based on a weighted average of the previous values, where the most recent observations are given more importance using larger weights~\cite{brown}.
 
-A more complex implementation of the same principle is the \emph{Holt-Winters Exponential Smoothing} method, which is able to decompose the time series into a level, trend and seasonal component, giving a more precise forecast~\cite{holt}. However, it is not possible to model more complex series with multiple seasonality patterns, as in a supermarket inflow rate which presents daily and weekly seasonalities.
+A more complex implementation of the same principle is the \emph{Holt-Winters Exponential Smoothing} method, which is able to decompose the time series into a level, trend and seasonal component, giving a more precise forecast~\cite{holt}. However, it is not possible to model more complex series with multiple seasonality patterns, as in a supermarket inflow rate, which presents daily and weekly seasonalities.
 
 Taylor’s \emph{Double Seasonal Exponential Smoothing} method was developed to forecast time series with two seasonal cycles: a short one that repeats itself many times within a longer one~\cite{taylor}.
 
