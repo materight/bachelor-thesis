@@ -47,7 +47,7 @@ Taylor’s \emph{Double Seasonal Exponential Smoothing} method was developed to 
 \subsection{Artificial Neural Networks}
 \label{subsec:artificial_neural_networks}
 
-\emph{Artificial Neural Networks} (ANN) allow complex nonlinear relationships between the target variable and its predictors. With time series data, lagged values of the time series can be used as inputs, in what is called an \emph{Autoregressive Neural Network} (AR-NN)~\cite{tang}. With seasonal data, it is also useful to add the last observed values from the past seasons in input~\cite{hyndman2018}. In general, to compute a forecast value \( \hat{y}_{t+1} \) for time \( t+1 \), the input can be expressed as:
+\emph{Artificial Neural Networks} (ANN) allow to model complex nonlinear relationships between the target variable and its predictors. With time series data, subsequent lagged values can be used as inputs, in what is called an \emph{Autoregressive Neural Network} (AR-NN)~\cite{tang}. With seasonal data, it is also useful to include in the input the last observed values from the past seasons~\cite{hyndman2018}. In general, to compute a forecast value \( \hat{y}_{t+1} \) for time \( t+1 \), the corresponding input sample can be written as:
 \[
   (y_{t}, y_{t-1}, ..., y_{t-p}, y_{t-m}, y_{t-2m}, ..., y_{t-Pm})
 \]
@@ -69,7 +69,7 @@ This method can be then applied recursively to obtain a three-step, four-step, e
 The \emph{AutoRegressive Integrated Moving Average} (ARIMA) models provide another technique for time series forecasting. Exponential smoothing and ARIMA models are the two most widely-used time series forecasting methods, and provide complementary approaches to the problem. While exponential smoothing models are based on a description of the trend and seasonality in the data, ARIMA models aim to describe the autocorrelations in the data~\cite{jenkins}:
 \begin{itemize}
   \item \emph{AutoRegressive} means that the model uses the relationship between an observation and some number of lagged previous values to generate a linear regression model;
-  \item \emph{Integrated} refers to the use of differencing of raw observations (e.g. subtracting an observation from the previous time step value) in order to make the time series \emph{stationary}. A stationary time series has constant time-independent mean, variance and autocorrelation;
+  \item \emph{Integrated} refers to the use of differencing of raw observations (e.g. subtracting an observation from the previous time step value) in order to make the time series \emph{stationary}. A stationary time series has constant and time-independent mean, variance and autocorrelation;
   \item \emph{Moving Average} means that the model uses the dependency between an observation and the residual error from a moving average model applied to lagged observations.
 \end{itemize}
 Accordingly, the parameters of the ARIMA model are defined as follows:
@@ -92,7 +92,7 @@ However, only a single seasonal effect can be modelled with SARIMA. To model mor
 \subsection{TBATS models}
 \label{subsec:tbats_models}
 
-An alternative approach proposed in 2011 by De Livera et al.~\cite{de_livera} uses a combination of Fourier terms with an exponential smoothing model and a \emph{Box-Cox transformation}~\cite{box}, in a completely automated manner. The main advantage of a TBATS model over a SARIMAX model with Fourier terms is that the seasonality is allowed to change slowly over time, while harmonic regression terms force the seasonal patterns to repeat periodically without changing. However, one drawback of TBATS models is that they are very slow to estimate, especially when the number of available observations is high, since they will consider various alternatives and fit different models in order to find the best one.
+An alternative approach proposed in 2011 by De Livera et al.~\cite{de_livera} uses a combination of Fourier terms with an exponential smoothing model and a \emph{Box-Cox transformation}~\cite{box}, in a completely automated manner. The main advantage of a TBATS model over a SARIMAX model with Fourier terms is that the seasonality is allowed to change slowly over time, while the harmonic regression terms force the seasonal patterns to repeat periodically without changing. However, one drawback of TBATS models is that they are very slow to estimate, especially when the number of available observations is large, since they will consider various alternatives and fit different models in order to find the best one.
 
 \section{Queueing theory}
 \label{sec:queueing_theory}
@@ -123,7 +123,7 @@ Green et al.~\cite{green1991} proposed an easy-to-compute approximation for dete
 
 In 2008, Stolletz~\cite{stolletz} proposed an improvement of the SIPP approach, the \emph{Stationary Backlog-Carryover} (SBC) approach. This method was designed for systems with temporal overloading, thus the models constructed for every consecutive period are no longer independent from each other. Contrary to the SIPP approach that independently applies a \( M/M/c/\infty \) model to each interval, SBC utilizes a \( M/M/c/c \) model, also known as the \emph{Erlang’s B model}, in which a maximum number of \( c \) customers can be in the queue at any time, and any further arrival to the queue is considered \emph{blocked} (i.e. lost). These blocked customers are then carried over into future periods. This is obtained by defining an \emph{artificial arrival rate} \( \widetilde{\lambda}(t) \) that consists of both the original arrival rate \( \lambda(t) \) and a \emph{backlog rate} \( b(t-1) \) of the previous period, that is the rate of blocked customers leaving the \( M/M/c/c \) system at time \( t-1 \). This artificial arrival rate can be then used with a modified \( M/M/c/\infty \) model to determine the average queue length.
 
-Once the average queue length has been determined with one of the aforementioned methods, the average waiting time in the queue can be calculated using \emph{Little’s Law}, proposed by Little in 1961~\cite{little}. This law states that the average number of customers in a stationary system \( Ls \) is equal to the arrival rate \( \lambda \) multiplied by the average time spent by a customer in the system \( Ws \):
+Once the average queue length has been determined with one of the aforementioned methods, the average waiting time in the queue can be calculated using \emph{Little’s Law}, proposed by Little in 1961~\cite{little}. This law states that the average number of customers in a stationary system \( Ls \) is equal to the arrival rate \( \lambda \) multiplied by the average time spent by the customers in the system \( Ws \):
 
 \begin{equation}
   Ls = \lambda \cdot Ws
