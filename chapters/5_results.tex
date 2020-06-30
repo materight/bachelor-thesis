@@ -1,12 +1,12 @@
 \chapter{Results}
 \label{cha:results}
 
-The first section of this chapter briefly discusses the implementation of the prototypes used for testing and performance evaluation. The next sections present the results obtained by the forecasting techniques described in the previous chapter and justify the choices made for the final model.
+The first section of this chapter briefly discusses the implementation of the prototypes used for testing and for performance evaluation. The next sections present the results obtained by the forecasting techniques described in the previous chapter and justify the choices made for the final model.
 
 \section{Prototype implementation}
 \label{sec:prototype_implementation}
 
-Different prototypes for the models presented in Chapter~\ref{cha:solution} were implemented in Python to be able to evaluate the prediction accuracy. In order to simplify the whole evaluation process and to prevent a model's results to influence the others', each model was implemented and tested separately. When the final architecture of the complete predictive model was defined, by choosing the prototypes that obtained the best performances, a final implementation, with all the submodules working sequentially, was written. This implementation was designed to be able to observe the customers' behavior and produce forecasts in real-time, and to be updated with newly collected observations once a day. With this structure, the prototype can be easily ported to the Scala programming language and integrated into the RetailerIN platform without needing much refactoring.
+Different prototypes for the models presented in Chapter~\ref{cha:solution} were implemented in Python to be able to evaluate the prediction accuracy. In order to simplify the whole evaluation process and to prevent a model's results to influence the others', each model was implemented and tested separately. When the final architecture of the complete predictive model was defined by choosing the prototypes that obtained the best performances, a final implementation, with all the submodules working sequentially, was written. This implementation was designed to be able to observe the customers' behavior and produce forecasts in real-time, and to be updated with newly collected observations once a day. With this structure, the prototype can be easily ported to the Scala programming language and integrated into the RetailerIN platform without needing much refactoring.
 
 \section{Inflow rate forecast}
 \label{sec:inflow_rate_forecast_results}
@@ -15,7 +15,7 @@ This section discusses the results obtained by the forecasting methods for the i
 \begin{itemize}
   \item Persistence model
   \item Drift model
-  \item Artificial Neural Network model
+  \item Autoregressive Neural Network model
   \item SARIMA model
 \end{itemize}
 
