@@ -1,10 +1,7 @@
 <h1 align='center'>Predictive Queue Management in Supermarkets</h1>
 
-<p align='center'>Final dissertation</p>
-
-<p align='center'><i>University of Trento</i></p>
-<div align='center'>Bachelor's degree in</div>
-<div align='center'>Computer Science</div>
+<p align='center'>University of Trento</p>
+<p align='center'>Bachelor's degree in Computer Science</p>
 
 <h3 align='center'>Matteo Destro</h3>
 
